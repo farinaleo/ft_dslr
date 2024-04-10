@@ -3,7 +3,6 @@ import math
 
 
 def describe_csv(dtf: pandas.DataFrame, verbose: bool = True):
-
     describe_dtf = pandas.DataFrame()
     dtf = dtf.drop(columns='Index', inplace=False)
     nb_features = dtf.select_dtypes(include=['number']).columns.tolist()

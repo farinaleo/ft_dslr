@@ -1,4 +1,4 @@
-import sys, os
+import os
 import argparse
 from ft_dslr.description import *
 

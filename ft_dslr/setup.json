@@ -1,4 +1,5 @@
 {
-    "describe_path": "/nfs/homes/lfarina/Desktop/ft_dslr/datasets/dataset_train.csv",
-    "pair_path": "/nfs/homes/lfarina/Desktop/ft_dslr/datasets/dataset_test.csv"
+    "describe_path": "/nfs/homes/nskiba/PycharmProjects/ft_dslr/datasets/dataset_train.csv",
+    "pair_path": "/nfs/homes/nskiba/PycharmProjects/ft_dslr/datasets/dataset_train.csv",
+    "histogram_path": "/nfs/homes/nskiba/PycharmProjects/ft_dslr/datasets/dataset_train.csv"
 }

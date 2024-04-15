@@ -1,6 +1,7 @@
 import os
+import json
 import argparse
-from ft_dslr.description import *
+import subprocess
 
 
 def args_parser():
@@ -18,8 +19,13 @@ if __name__ == '__main__':
     try:
         args = args_parser().parse_args()
         file_path = os.path.abspath(os.path.dirname(__file__)) + '/' + args.Input_file[0]
-        dtf = csv_to_dataframe(file_path)
-        describe_csv(dtf)
+        with open('ft_dslr/setup.json', 'r') as file:
+            data = json.load(file)
+        data['describe_path'] = file_path
+        with open('ft_dslr/setup.json', 'w') as file:
+            json.dump(data, file, indent=4)
+        subprocess.call(['jupyter', 'execute', '--inplace', 'ft_dslr/describe.ipynb'])
+        subprocess.call(['jupyter', 'notebook', 'ft_dslr/describe.ipynb'])
     except Exception as e:
         print('Error: the program can not read the csv file properly')
         print('Please make sure that the given path is correct and your datas are not corrupted')

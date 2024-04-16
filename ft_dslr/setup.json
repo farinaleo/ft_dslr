@@ -1,5 +1,7 @@
 {
     "describe_path": "/nfs/homes/lfarina/Desktop/ft_dslr/datasets/dataset_train.csv",
     "pair_path": "/nfs/homes/lfarina/Desktop/ft_dslr/datasets/dataset_train.csv",
-    "scatter_path": "/nfs/homes/lfarina/Desktop/ft_dslr/datasets/dataset_train.csv"
+    "scatter_path": "/nfs/homes/lfarina/Desktop/ft_dslr/datasets/dataset_train.csv",
+    "interpret_path": "/nfs/homes/lfarina/Desktop/ft_dslr/datasets/dataset_train.csv"
+
 }

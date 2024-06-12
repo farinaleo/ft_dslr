@@ -64,7 +64,7 @@ def plot_single_graph(df: pd.DataFrame, x_cols: list, y_cols: list, fig: plt.Axe
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2 and len(sys.argv) != 4:
+    if len(sys.argv) != 2:
         print('[ERROR] Usage: python pair_plot.py <file name>')
         exit(1)
     try:

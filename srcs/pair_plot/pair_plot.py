@@ -27,6 +27,7 @@ def pair_plot(df: pd.DataFrame, verbose: bool = False) -> None:
         for y in range(y_size):
             plot_single_graph(df_tmp, x_col, y_col, axes[y, x], x, y)
 
+    plt.legend(['G', 'R', 'S', 'H'], loc='center left', bbox_to_anchor=(1, 0.5))
     plt.show()
 
 

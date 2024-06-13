@@ -3,6 +3,15 @@ import configparser
 
 
 def format_csv(path: str, config: str = None, norm_data: bool = False, verbose: bool = False) -> pd.DataFrame:
+    """
+    Format a CSV file to be used for a Logistic Regression. If a config file is specified, it will be used
+    to remove Columns and replace values.
+    :param path: The path of the file.
+    :param config: The path of the config file.
+    :param norm_data: Option to normalize the data. (apply the Z-score and replace missing values with Mean Imputation)
+    :param verbose: Print addition information.
+    :return: The formatted df.DataFrame.
+    """
     try:
         df = pd.read_csv(path)
         if config is not None:
@@ -17,11 +26,23 @@ def format_csv(path: str, config: str = None, norm_data: bool = False, verbose: 
 
 
 def open_csv(path: str) -> pd.DataFrame:
+    """
+    Open a CSV file to be used convert as a pandas DataFrame.
+    :param path: The path of the file.
+    :return: The csv as a pandas DataFrame.
+    """
     df = pd.read_csv(path)
     return df
 
 
 def apply_config(config: str, df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
+    """
+    Apply a config file to the given data frame.
+    :param config: the path of the config file.
+    :param df: the data frame.
+    :param verbose: Print addition information.
+    :return: The formatted df.
+    """
     conf = configparser.ConfigParser()
     conf.optionxform = lambda option: option
     conf.read(config)
@@ -30,8 +51,14 @@ def apply_config(config: str, df: pd.DataFrame, verbose: bool = False) -> pd.Dat
     return df
 
 
-
-def config_drop_columns(df: pd, config:configparser.ConfigParser, verbose:bool=False) -> pd.DataFrame:
+def config_drop_columns(df: pd, config: configparser.ConfigParser, verbose: bool = False) -> pd.DataFrame:
+    """
+    Drop columns specified in the config file.
+    :param df: the data frame.
+    :param config: the config file as a ConfigParser object.
+    :param verbose: Print addition information.
+    :return: the formatted data frame.
+    """
     for col in config['COLUMNS']:
         if not bool(config['COLUMNS'].getboolean(col)) and col in df.columns:
             if verbose: print(f'[INFO] Drop {col}')
@@ -39,7 +66,14 @@ def config_drop_columns(df: pd, config:configparser.ConfigParser, verbose:bool=F
     return df
 
 
-def config_replace_values(df: pd, config:configparser.ConfigParser, verbose:bool=False) -> pd.DataFrame:
+def config_replace_values(df: pd, config: configparser.ConfigParser, verbose: bool = False) -> pd.DataFrame:
+    """
+    Replace values specified in the config file.
+    :param df: the data frame.
+    :param config: the config file as a ConfigParser object.
+    :param verbose: Print additional information.
+    :return: the formatted data frame.
+    """
     for section in config.sections():
         if section.startswith('REPLACE:'):
             sub_section = section.replace('REPLACE:', '')
@@ -51,6 +85,11 @@ def config_replace_values(df: pd, config:configparser.ConfigParser, verbose:bool
 
 
 def add_missing_values(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add missing with Mean Imputation.
+    :param df: the data frame.
+    :return: the formatted data frame.
+    """
     for col in df.select_dtypes(include=['number']).columns.tolist():
         _mean = df[col].mean()
         df[col] = df[col].fillna(_mean)
@@ -58,6 +97,11 @@ def add_missing_values(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def normalise_csv(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Normalise the data frame with the Z-score.
+    :param df: the data frame.
+    :return: the formatted data frame.
+    """
     for col in df.select_dtypes(include=['number']).columns.tolist():
         _mean = df[col].mean()
         _std = df[col].std()

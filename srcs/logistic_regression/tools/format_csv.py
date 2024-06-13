@@ -66,8 +66,14 @@ def config_drop_columns(df: pd, config: configparser.ConfigParser, verbose: bool
     return df
 
 
-
-def config_drop_columns(df: pd, config:configparser.ConfigParser, verbose:bool=False) -> pd.DataFrame:
+def config_drop_columns(df: pd, config: configparser.ConfigParser, verbose: bool = False) -> pd.DataFrame:
+    """
+    Drop columns specified in the config file.
+    :param df: the data frame.
+    :param config: the config file as a ConfigParser object.
+    :param verbose: Print addition information.
+    :return: the formatted data frame.
+    """
     for col in config['COLUMNS']:
         if not bool(config['COLUMNS'].getboolean(col)) and col in df.columns:
             if verbose: print(f'[INFO] Drop {col}')
@@ -75,7 +81,14 @@ def config_drop_columns(df: pd, config:configparser.ConfigParser, verbose:bool=F
     return df
 
 
-def config_replace_values(df: pd, config:configparser.ConfigParser, verbose:bool=False) -> pd.DataFrame:
+def config_replace_values(df: pd, config: configparser.ConfigParser, verbose: bool = False) -> pd.DataFrame:
+    """
+    Replace values specified in the config file.
+    :param df: the data frame.
+    :param config: the config file as a ConfigParser object.
+    :param verbose: Print additional information.
+    :return: the formatted data frame.
+    """
     for section in config.sections():
         if section.startswith('REPLACE:'):
             sub_section = section.replace('REPLACE:', '')
@@ -87,6 +100,11 @@ def config_replace_values(df: pd, config:configparser.ConfigParser, verbose:bool
 
 
 def add_missing_values(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add missing with Mean Imputation.
+    :param df: the data frame.
+    :return: the formatted data frame.
+    """
     for col in df.select_dtypes(include=['number']).columns.tolist():
         _mean = df[col].mean()
         df[col] = df[col].fillna(_mean)

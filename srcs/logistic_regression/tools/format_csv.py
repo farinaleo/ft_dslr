@@ -61,8 +61,35 @@ def config_drop_columns(df: pd, config: configparser.ConfigParser, verbose: bool
     """
     for col in config['COLUMNS']:
         if not bool(config['COLUMNS'].getboolean(col)) and col in df.columns:
+    df = config_drop_columns(df, conf, verbose=verbose)
+    df = config_replace_values(df, conf, verbose=verbose)
+    return df
+
+
+
+def config_drop_columns(df: pd, config:configparser.ConfigParser, verbose:bool=False) -> pd.DataFrame:
+    for col in config['COLUMNS']:
+        if not bool(config['COLUMNS'].getboolean(col)) and col in df.columns:
             if verbose: print(f'[INFO] Drop {col}')
             df.drop(col, axis=1, inplace=True)
+    return df
+
+
+def config_replace_values(df: pd, config:configparser.ConfigParser, verbose:bool=False) -> pd.DataFrame:
+    for section in config.sections():
+        if section.startswith('REPLACE:'):
+            sub_section = section.replace('REPLACE:', '')
+            if sub_section in df.columns:
+                for var in config[section]:
+                    if verbose: print(f'[INFO] replace {var} by {config[section][var]} in {sub_section}')
+                    df[sub_section] = df[sub_section].replace(var, config[section][var])
+    return df
+
+
+def add_missing_values(df: pd.DataFrame) -> pd.DataFrame:
+    for col in df.select_dtypes(include=['number']).columns.tolist():
+        _mean = df[col].mean()
+        df[col] = df[col].fillna(_mean)
     return df
 
 

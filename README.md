@@ -47,3 +47,11 @@ where
 ```math
     z(x) = \beta_0 + \beta_1 * x
 ```
+
+To find the best param $$\beta_0$$ and $$\beta_1$$ we search to minimise the cost function associate
+to the sigmoid.
+
+Bernoulli distribution:
+```math
+    P(y = Y) = \sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)}
+```

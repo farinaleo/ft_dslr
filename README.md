@@ -48,7 +48,7 @@ where
     z(x) = \beta_0 + \beta_1 * x
 ```
 
-To find the best param $$\beta_0$$ and $$\beta_1$$ we search to minimise the cost function associate
+To find the best param $\beta_0$ and $\beta_1$ we search to minimise the cost function associate
 to the sigmoid.
 
 Bernoulli distribution:

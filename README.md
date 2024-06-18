@@ -57,8 +57,22 @@ Bernoulli distribution:
 ```
 Cost Function
 ```math
-    \mathcal{L} = \prod^{n - 1}_{i = 0} P(Y = y)
+    L = \prod^{n - 1}_{i = 0} P(Y = y)
 ```
 ```math
-    \mathcal{L} = \sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)}
+    L = \prod^{n - 1}_{i = 0} \sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)}
+```
+To counteract the fact that a product of numbers between 0 and 1 tends towards 0,
+we apply the log function to each side of the equation.
+```math
+    log(L) = log(\prod^{n - 1}_{i = 0} \sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)})
+```
+```math
+    log(L) = \sum^{n - 1}_{i = 0} log(\sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)})
+```
+```math
+    log(L) = \sum^{n - 1}_{i = 0} log(\sigma(x)^{y}) + log((1 - \sigma(x))^{(1 - y)})
+```
+```math
+    log(L) = \sum^{n - 1}_{i = 0} log(\sigma(x)^{y}) + (1 - y)log((1 - \sigma(x)))
 ```

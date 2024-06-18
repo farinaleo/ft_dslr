@@ -57,8 +57,8 @@ a gradient descent.
 
 For each iteration of the gradient descent we apply the following formula:
 ```math
-    \beta_0 = \beta_{0(prev)} - \apha * {\partial \mathcal{L} \over \partial \beta_0}
+    \beta_0 = \beta_{0(prev)} - \alpha * {\partial \mathcal{L} \over \partial \beta_0}
 ```
 ```math
-    \beta_1 = \beta_{1(prev)} - \apha * {\partial \mathcal{L} \over \partial \beta_1}
+    \beta_1 = \beta_{1(prev)} - \alpha * {\partial \mathcal{L} \over \partial \beta_1}
 ```

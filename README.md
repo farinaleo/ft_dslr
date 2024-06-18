@@ -28,5 +28,12 @@ to the sigmoid.
 
 Bernoulli distribution:
 ```math
-    P(y = Y) = \sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)}
+    P(Y = y) = \sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)}
+```
+Cost Function
+```math
+    \mathcal{L} = \prod^{n - 1}_{i = 0} P(Y = y)
+```
+```math
+    \mathcal{L} = \sigma(x)^{y} * (1 - \sigma(x))^{(1 - y)}
 ```

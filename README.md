@@ -73,6 +73,17 @@ we apply the log function to each side of the equation.
 ```math
     log(L) = \sum^{n - 1}_{i = 0} log(\sigma(x)^{y}) + log((1 - \sigma(x))^{(1 - y)})
 ```
+This gives us the following cost function, known as the "log loss" function.
 ```math
     \mathcal{L} = \sum^{n - 1}_{i = 0} y * log(\sigma(x)) + (1 - y) * log((1 - \sigma(x)))
+```
+To find the best parameters $\beta_0$ and $\beta_1$ we want to minimise the coset function with
+a gradient descent.
+
+For each iteration of the gradient descent we apply the following formula:
+```math
+    \beta_0 = \beta_{0(prev)} - \apha * {\partial \mathcal{L} \over \partial \beta_0}
+```
+```math
+    \beta_1 = \beta_{1(prev)} - \apha * {\partial \mathcal{L} \over \partial \beta_1}
 ```

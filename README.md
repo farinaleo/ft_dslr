@@ -66,8 +66,10 @@ where
 ```math
     {\partial \mathcal{L} \over \partial \beta_0} = {\partial \mathcal{L} \over \partial \sigma}
      * {\partial \sigma \over \partial \beta_0}
+     = \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)}) * x
 ```
 ```math
     {\partial \mathcal{L} \over \partial \beta_1} = {\partial \mathcal{L} \over \partial \sigma}
      * {\partial \sigma \over \partial \beta_1}
+     = \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)})
 ```

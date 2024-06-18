@@ -49,5 +49,5 @@ we apply the log function to each side of the equation.
     log(L) = \sum^{n - 1}_{i = 0} log(\sigma(x)^{y}) + log((1 - \sigma(x))^{(1 - y)})
 ```
 ```math
-    log(L) = \sum^{n - 1}_{i = 0} log(\sigma(x)^{y}) + (1 - y)log((1 - \sigma(x)))
+    \mathcal{L} = \sum^{n - 1}_{i = 0} y * log(\sigma(x)) + (1 - y) * log((1 - \sigma(x)))
 ```

@@ -62,3 +62,12 @@ For each iteration of the gradient descent we apply the following formula:
 ```math
     \beta_1 = \beta_{1(prev)} - \alpha * {\partial \mathcal{L} \over \partial \beta_1}
 ```
+where
+```math
+    {\partial \mathcal{L} \over \partial \beta_0} = {\partial \mathcal{L} \over \partial \sigma}
+     * {\partial \sigma \over \partial \beta_0}
+```
+```math
+    {\partial \mathcal{L} \over \partial \beta_1} = {\partial \mathcal{L} \over \partial \sigma}
+     * {\partial \sigma \over \partial \beta_1}
+```

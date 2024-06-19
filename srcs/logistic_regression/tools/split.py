@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def split_date(data: pd.DataFrame, test_size: float, random_state: int) -> tuple:
+def split_data(data: pd.DataFrame, test_size: float, random_state: int) -> tuple:
     """
     Split the data into training and testing sets
     :param data: the data to split

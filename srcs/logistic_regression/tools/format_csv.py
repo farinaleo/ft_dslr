@@ -118,4 +118,4 @@ def list_to_csv(y_list: list):
     df = pd.DataFrame(y_list, columns=['Hogwarts House'])
     df.reset_index(inplace=True)
     df.rename(columns={'index': 'Index'}, inplace=True)
-    df.to_csv('data/houses.csv', index=False)
+    df.to_csv('../../data/houses.csv', index=False)

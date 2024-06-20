@@ -17,7 +17,7 @@ def normalise_df(df: pd.Series) -> pd.Series:
     return df_cp
 
 
-def denorm_thetas(thetas: list[float], mean_x: float, std_x: float, mean_y: float, std_y: float) -> list[float]:
+def denorm_thetas(thetas: dict, mean_x: float, std_x: float, mean_y: float, std_y: float) -> list[float]:
     """
     Denormalise thetas trained on a normalised dataframe.
     :param std_y: the standard deviation of the data to predict.
@@ -27,7 +27,7 @@ def denorm_thetas(thetas: list[float], mean_x: float, std_x: float, mean_y: floa
     :param thetas: normalised thetas.
     :return: Denormalised thetas.
     """
-    t1 = thetas[1] * (std_y / std_x)
-    t0 = mean_y + std_y * (thetas[0] - (thetas[1] * (mean_x / std_x)))
+    t1 = thetas['theta1'] * (std_y / std_x)
+    t0 = mean_y + std_y * (thetas['theta0'] - (thetas['theta1'] * (mean_x / std_x)))
 
     return [t0, t1]

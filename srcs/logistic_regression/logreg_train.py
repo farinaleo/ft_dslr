@@ -26,9 +26,8 @@ def options_parser():
                         help='The config file.')
     parser.add_argument('-l', '--learning_rate', type=float, default=0.1, help='The learning rate of the gradient '
                                                                                'descent.')
-    parser.add_argument('-e', '--epoch', type=int, default=1000, help='The number of iterations of the '
+    parser.add_argument('-e', '--epoch', type=int, default=2500, help='The number of iterations of the '
                                                                       'gradient descent.')
-    parser.add_argument('-y', '--y_col', type=str, default='Hogwarts House', help='The columns to predict.')
     return parser
 
 

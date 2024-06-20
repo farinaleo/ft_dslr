@@ -26,6 +26,7 @@ def options_parser():
                                                                                'descent.')
     parser.add_argument('-e', '--epoch', type=int, default=2500, help='The number of iterations of the '
                                                                       'gradient descent.')
+    parser.add_argument('-y', '--y_col', type=str, default='Hogwarts House', help='The columns to predict.')
     return parser
 
 

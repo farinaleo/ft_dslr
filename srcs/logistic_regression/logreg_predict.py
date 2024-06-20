@@ -1,9 +1,9 @@
 import pandas as pd
 import json
 import configparser
-from .tools.format_csv import config_drop_columns, format_csv, list_to_csv
+from tools.format_csv import config_drop_columns, format_csv, list_to_csv
 import numpy as np
-from sklearn.metrics import accuracy_score
+import argparse
 
 
 def load_weights(weight_path: str):
@@ -92,16 +92,16 @@ def category_to_label(y: list, conf: configparser.ConfigParser):
     return y_labels
 
 
-def logreg_predict(data: str, weight: str):
+def logreg_predict(data_path: str, weight_path: str, config_path: str):
     """
     Predict the house of the students
-    :param str, data: the path to the dataset
-    :param str, weight: the path to the weights
+    :param str, data_path: the path to the dataset
+    :param str, weight_path: the path to the weights
+    :param str, config_path: the path to the configuration file
     :return:
     """
-    config_path = "data/logistic.ini"
-    df_data = format_csv(data, config=config_path, norm_data=True)
-    weights = load_weights(weight)
+    df_data = format_csv(data_path, config=config_path, norm_data=True)
+    weights = load_weights(weight_path)
     config = load_config(config_path)
 
     df_data, X = prepare_data(df_data, config)
@@ -112,3 +112,26 @@ def logreg_predict(data: str, weight: str):
     pred_labels = category_to_label(y_pred, config)
 
     list_to_csv(pred_labels)
+
+
+def options_parser():
+    """Use to handle program parameters and options.
+    """
+    parser = argparse.ArgumentParser(
+        prog='DSLR predict model',
+        description='this program should be used to predict with a model of logistic regression',
+        epilog='Please read the subject before proceeding to understand the input file format.')
+    parser.add_argument('Dataset_file', type=str, nargs=1)
+    parser.add_argument('Weights_file', type=str, nargs=1)
+    parser.add_argument('-c', '--config', type=str, default='../../data/logistic.ini',
+                        help='The config file.')
+    return parser
+
+
+if __name__ == '__main__':
+    try:
+        args = options_parser().parse_args()
+        logreg_predict(args.Dataset_file[0], args.Weights_file[0], args.config)
+    except Exception as e:
+        print('[ERROR] The predict process failed')
+        print(e)

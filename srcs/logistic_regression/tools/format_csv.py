@@ -107,3 +107,15 @@ def normalise_csv(df: pd.DataFrame) -> pd.DataFrame:
         _std = df[col].std()
         df[col] = df[col].apply(lambda x: (x - _mean) / _std)
     return df
+
+
+def list_to_csv(y_list: list):
+    """
+    Convert a list to a CSV file and save it.
+    :param y_list: the list to convert.
+    :return:
+    """
+    df = pd.DataFrame(y_list, columns=['Hogwarts House'])
+    df.reset_index(inplace=True)
+    df.rename(columns={'index': 'Index'}, inplace=True)
+    df.to_csv('data/houses.csv', index=False)

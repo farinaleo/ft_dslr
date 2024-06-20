@@ -1,6 +1,15 @@
 from tools.format_csv import format_csv
 from train import train_model
+from tools.split import split_data
 import argparse
+import json
+
+
+def save_model(model:dict, file_name:str) -> None:
+
+    with open(file_name, 'w') as file:
+        json.dump(model, file, indent=4)
+
 
 
 def options_parser():
@@ -27,9 +36,9 @@ if __name__ == '__main__':
     try:
         args = options_parser().parse_args()
         df = format_csv(args.Train_file[0], config=args.config, verbose=args.verbose)
-        print(df.columns)
-        model = train_model(df, args.y_col, args.learning_rate, args.epoch)
-        print(model)
+        X_train, X_test, y_train, y_test = split_data(df, 0.2, None)
+        model = train_model(X_train, y_train, args.learning_rate, args.epoch)
+        save_model(model, 'model.json')
     except Exception as e:
         print('[ERROR] The training process failed')
         print(e)

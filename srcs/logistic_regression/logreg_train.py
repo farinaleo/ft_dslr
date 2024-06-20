@@ -5,11 +5,9 @@ import argparse
 import json
 
 
-def save_model(model:dict, file_name:str) -> None:
-
+def save_model(model: dict, file_name: str) -> None:
     with open(file_name, 'w') as file:
         json.dump(model, file, indent=4)
-
 
 
 def options_parser():

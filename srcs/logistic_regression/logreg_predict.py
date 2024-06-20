@@ -9,7 +9,7 @@ import argparse
 def load_weights(weight_path: str):
     """
     Load the weights from the json file
-    :param str, weight_path: the path to the weights
+    :param str, weight_path: the path to the weights.
     :return: the weights in a dictionary
     """
     with open(weight_path) as json_data:

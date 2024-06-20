@@ -17,7 +17,7 @@ def gradient_descent(X: pd.Series, Y: pd.Series, learning_rate: float, epoch: in
     thetas = {'theta0': 0, 'theta1': 1}
 
     for _ in range(epoch):
-        z = X.apply(lambda x: thetas[0] + thetas[1] * x)
+        z = X.apply(lambda x: thetas['theta0'] + thetas['theta1'] * x)
         h = sigmoid(z)
 
         thetas['theta0'] -= learning_rate * (1 / m) * np.sum(h - Y)

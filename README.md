@@ -1,6 +1,31 @@
 # ft_dslr
 ---
 ## Usage
+### For the required data analysis:
+
+_Move to the corresponding directory (in srcs)_
+- Describe:
+  - Run `python describe.py <file>`
+- Histogram:
+  - Run `python histogram.py <file>`
+- Scatter plot:
+  - Run `python scatter_plot.py <file>`
+- Pair plot:
+  - Run `python pair_plot.py <file>`
+
+All script came with its associate jupyter notebook witch give us more information and answers for
+the questions of the subject.
+
+### For the required training and predict process:
+
+_Move the directory : srcs/logistic_regression_
+
+Scripts `logreg_train.py` and `logreg_predict.py`, required by the subject, must be used to train a model
+and predict the house of a student.
+
+The accuracy of the model must greater or equal to 98%. It means that can only have a 2% of error during the
+predict process.
+
 
 ---
 ## Train model

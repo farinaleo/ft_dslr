@@ -100,7 +100,7 @@ def logreg_predict(data_path: str, weight_path: str, config_path: str):
     :param str, config_path: the path to the configuration file
     :return:
     """
-    df_data = format_csv(data_path, config=config_path, norm_data=True)
+    df_data = format_csv(data_path, config=config_path, norm_data=False)
     weights = load_weights(weight_path)
     config = load_config(config_path)
 

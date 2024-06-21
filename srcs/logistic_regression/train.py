@@ -1,5 +1,5 @@
 import pandas as pd
-from tools.norm import normalise_df
+from tools.norm import normalise_df, denorm_thetas
 from gradient_descent import gradient_descent
 from tqdm import tqdm
 
@@ -18,13 +18,13 @@ def train_model(X: pd.DataFrame, y: pd.Series, learning_rate: float = 0.1, epoch
     with tqdm(total=len(X.columns) * 4, desc="Training ", ncols=100) as pbar:
         for col in X.columns:
             _X = normalise_df(X[col].astype(float))
-            _model = learn_multiple_y(_X, y, epoch=epoch, learning_rate=learning_rate, pbar=pbar)
+            _model = learn_multiple_y(_X, y, epoch=epoch, learning_rate=learning_rate, x_mean=X[col].astype(float).mean(), x_std=X[col].astype(float).std(), pbar=pbar)
             model[col] = _model
     print('Done')
     return model
 
 
-def learn_multiple_y(X: pd.Series, y: pd.Series, epoch: int, learning_rate: float, pbar=None) -> dict:
+def learn_multiple_y(X: pd.Series, y: pd.Series, epoch: int, learning_rate: float, x_mean, x_std, pbar=None) -> dict:
     """
     Apply for each variable to predict, in the y dataset, the gradient descent.
     :param X: The explanatory variables.
@@ -41,7 +41,8 @@ def learn_multiple_y(X: pd.Series, y: pd.Series, epoch: int, learning_rate: floa
     for param in params:
         _X = X.copy(deep=True)
         _y = y.replace(params, [1 if e == param else 0 for e in params])
-        model[str(param)] = gradient_descent(_X, _y, epoch=epoch, learning_rate=learning_rate)
+        _model = gradient_descent(_X, _y, epoch=epoch, learning_rate=learning_rate)
+        model[str(param)] = denorm_thetas(_model, x_mean, x_std, _y.astype(float).mean(), _y.astype(float).std())
         if pbar is not None:
             pbar.update(1)
 

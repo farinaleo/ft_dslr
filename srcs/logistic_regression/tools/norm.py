@@ -27,7 +27,7 @@ def denorm_thetas(thetas: dict, mean_x: float, std_x: float, mean_y: float, std_
     :param thetas: normalised thetas.
     :return: Denormalised thetas.
     """
-    t1 = thetas['theta1'] * (std_y / std_x)
-    t0 = mean_y + std_y * (thetas['theta0'] - (thetas['theta1'] * (mean_x / std_x)))
+    t1 = thetas["theta1"] * (std_y / std_x)
+    t0 = mean_y + std_y * (thetas["theta0"] - (thetas["theta1"] * (mean_x / std_x)))
 
-    return {'theta0': t0, 'theta1': t1}
+    return {"theta0": t0, "theta1": t1}

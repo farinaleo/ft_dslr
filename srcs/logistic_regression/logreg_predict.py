@@ -103,12 +103,13 @@ def category_to_label(y: list, conf: configparser.ConfigParser):
     return y_labels
 
 
-def logreg_predict(data_path: str, weight_path: str, config_path: str):
+def logreg_predict(data_path: str, weight_path: str, config_path: str, dest_path: str):
     """
     Predict the house of the students
     :param str, data_path: the path to the dataset
     :param str, weight_path: the path to the weights
     :param str, config_path: the path to the configuration file
+    :param str, dest_path: the destination path.
     :return:
     """
     df_data = format_csv(data_path, config=config_path, norm_data=False)
@@ -122,7 +123,7 @@ def logreg_predict(data_path: str, weight_path: str, config_path: str):
 
     pred_labels = category_to_label(y_pred, config)
 
-    list_to_csv(pred_labels)
+    list_to_csv(pred_labels, dest_path)
 
 
 def options_parser():
@@ -137,13 +138,20 @@ def options_parser():
     parser.add_argument(
         "-c", "--config", type=str, default="../../data/logistic.ini", help="The config file."
     )
+    parser.add_argument(
+        "-d",
+        "--dest",
+        type=str,
+        default="../../data/",
+        help="Destination path, location where to save prediction.",
+    )
     return parser
 
 
 if __name__ == "__main__":
     try:
         args = options_parser().parse_args()
-        logreg_predict(args.Dataset_file[0], args.Weights_file[0], args.config)
+        logreg_predict(args.Dataset_file[0], args.Weights_file[0], args.config, args.dest)
     except Exception as e:
         print("[ERROR] The predict process failed")
         print(e)

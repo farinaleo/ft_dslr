@@ -1,5 +1,6 @@
 import pandas as pd
 import configparser
+import os
 
 
 
@@ -118,13 +119,14 @@ def normalise_csv(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def list_to_csv(y_list: list):
+def list_to_csv(y_list: list, dest_path: str):
     """
     Convert a list to a CSV file and save it.
     :param y_list: the list to convert.
+    :param dest_path: the path of the directory to save the CSV file.
     :return:
     """
     df = pd.DataFrame(y_list, columns=["Hogwarts House"])
     df.reset_index(inplace=True)
     df.rename(columns={"index": "Index"}, inplace=True)
-    df.to_csv("../../data/houses.csv", index=False)
+    df.to_csv(os.path.join(dest_path, "houses.csv"), index=False)

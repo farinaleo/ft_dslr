@@ -7,6 +7,8 @@ PYTHON = ${VENV_DIR}/bin/python
 # Pip executable
 PIP = ${VENV_DIR}/bin/pip
 
+DATA_URL = https://cdn.intra.42.fr/document/document/29579/datasets.tgz
+
 all:
 	@echo "Usage:"
 	@echo "  make ${VENV_DIR} - create a virtual environment"
@@ -37,4 +39,11 @@ format:
 	isort srcs --settings-path pyproject.toml
 
 
-.PHONY: all clean install $(VENV_DIR)) lint format
+data:
+	wget ${DATA_URL}
+	[ -d ./data/external ] || mkdir -p ./data/external
+	tar -xvf datasets.tgz -C ./data/external/
+	rm -rf datasets.tgz
+
+
+.PHONY: all clean install $(VENV_DIR) lint format data

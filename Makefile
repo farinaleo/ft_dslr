@@ -46,15 +46,15 @@ clean:
 ## Lint using flake8 and black (use `make format` to do formatting)
 .PHONY: lint
 lint:
-	flake8 ft_dslr --disable-noqa --config setup.cfg
-	isort --check --diff --profile black ft_dslr
-	black --check --config pyproject.toml ft_dslr
+	flake8 ${PROJECT_NAME} --disable-noqa --config setup.cfg
+	isort --check --diff --profile black ${PROJECT_NAME}
+	black --check --config pyproject.toml ${PROJECT_NAME}
 
 ## Format source code with black
 .PHONY: format
 format:
-	black --config pyproject.toml ft_dslr
-	isort srcs --settings-path pyproject.toml
+	black --config pyproject.toml ${PROJECT_NAME}
+	isort ${PROJECT_NAME} --settings-path pyproject.toml
 
 
 ## Download required data from the 42 intra

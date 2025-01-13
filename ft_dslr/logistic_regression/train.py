@@ -1,5 +1,5 @@
-from gradient_descent import gradient_descent
 import pandas as pd
+from gradient_descent import gradient_descent
 from tools.norm import denorm_thetas, normalise_df
 from tqdm import tqdm
 

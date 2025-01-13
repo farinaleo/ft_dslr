@@ -1,7 +1,7 @@
-import pandas as pd
 import configparser
 import os
 
+import pandas as pd
 
 
 def format_csv(

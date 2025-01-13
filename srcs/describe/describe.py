@@ -1,7 +1,8 @@
-from tools import open_csv
-import pandas as pd
 import math
 import sys
+
+import pandas as pd
+from tools import open_csv
 
 
 def describe(df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
@@ -13,15 +14,16 @@ def describe(df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
     """
     description = pd.DataFrame()
 
-    df_tmp = df.drop(columns='Index', inplace=False)
-    columns_num = df_tmp.select_dtypes(include=['number']).columns.tolist()
+    df_tmp = df.drop(columns="Index", inplace=False)
+    columns_num = df_tmp.select_dtypes(include=["number"]).columns.tolist()
     df_tmp = df_tmp[columns_num]
     df_tmp = df_tmp.astype(float)
 
-    description['Info'] = ['Count', 'Mean', 'Std', 'Min', '25%', '50%', '75%', 'Max']
+    description["Info"] = ["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]
 
     for col in df_tmp.columns:
-        if verbose: print(f'Column: {col}')
+        if verbose:
+            print(f"Column: {col}")
         description[col] = describe_column(df_tmp, col)
 
     return description
@@ -88,8 +90,8 @@ def find_min_max(df: pd.DataFrame, column: str) -> tuple:
     :param column: the column to describe.
     :return: a tuple of the min and the max of the given column.
     """
-    min_v = float('inf')
-    max_v = float('-inf')
+    min_v = float("inf")
+    max_v = float("-inf")
 
     for _, value in df[column].items():
         if value > max_v:
@@ -118,15 +120,15 @@ def compute_quantile(df: pd.DataFrame, column: str, q: float) -> tuple:
     return q_v
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print('[ERROR] Usage:python describe.py <file to describe>')
+        print("[ERROR] Usage:python describe.py <file to describe>")
         exit(1)
     try:
         df = open_csv(sys.argv[1])
         description = describe(df)
         print(description)
-        print('\n[INFO] To see the entire description, use the jupyter notebook.')
+        print("\n[INFO] To see the entire description, use the jupyter notebook.")
     except Exception:
-        print('[ERROR] Could not open the file properly.')
+        print("[ERROR] Could not open the file properly.")
         exit(1)

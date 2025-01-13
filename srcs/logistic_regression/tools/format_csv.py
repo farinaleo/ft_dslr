@@ -1,8 +1,12 @@
 import pandas as pd
 import configparser
+import os
 
 
-def format_csv(path: str, config: str = None, norm_data: bool = False, verbose: bool = False) -> pd.DataFrame:
+
+def format_csv(
+    path: str, config: str = None, norm_data: bool = False, verbose: bool = False
+) -> pd.DataFrame:
     """
     Format a CSV file to be used for a Logistic Regression. If a config file is specified, it will be used
     to remove Columns and replace values.
@@ -22,7 +26,7 @@ def format_csv(path: str, config: str = None, norm_data: bool = False, verbose: 
         return df
 
     except Exception as e:
-        raise ValueError(f'[ERROR] Some thing went wrong with csv and/or config file.\n{e}')
+        raise ValueError(f"[ERROR] Some thing went wrong with csv and/or config file.\n{e}")
 
 
 def open_csv(path: str) -> pd.DataFrame:
@@ -51,7 +55,9 @@ def apply_config(config: str, df: pd.DataFrame, verbose: bool = False) -> pd.Dat
     return df
 
 
-def config_drop_columns(df: pd, config: configparser.ConfigParser, verbose: bool = False) -> pd.DataFrame:
+def config_drop_columns(
+    df: pd, config: configparser.ConfigParser, verbose: bool = False
+) -> pd.DataFrame:
     """
     Drop columns specified in the config file.
     :param df: the data frame.
@@ -59,14 +65,17 @@ def config_drop_columns(df: pd, config: configparser.ConfigParser, verbose: bool
     :param verbose: Print addition information.
     :return: the formatted data frame.
     """
-    for col in config['COLUMNS']:
-        if not bool(config['COLUMNS'].getboolean(col)) and col in df.columns:
-            if verbose: print(f'[INFO] Drop {col}')
+    for col in config["COLUMNS"]:
+        if not bool(config["COLUMNS"].getboolean(col)) and col in df.columns:
+            if verbose:
+                print(f"[INFO] Drop {col}")
             df.drop(col, axis=1, inplace=True)
     return df
 
 
-def config_replace_values(df: pd, config: configparser.ConfigParser, verbose: bool = False) -> pd.DataFrame:
+def config_replace_values(
+    df: pd, config: configparser.ConfigParser, verbose: bool = False
+) -> pd.DataFrame:
     """
     Replace values specified in the config file.
     :param df: the data frame.
@@ -75,11 +84,12 @@ def config_replace_values(df: pd, config: configparser.ConfigParser, verbose: bo
     :return: the formatted data frame.
     """
     for section in config.sections():
-        if section.startswith('REPLACE:'):
-            sub_section = section.replace('REPLACE:', '')
+        if section.startswith("REPLACE:"):
+            sub_section = section.replace("REPLACE:", "")
             if sub_section in df.columns:
                 for var in config[section]:
-                    if verbose: print(f'[INFO] replace {var} by {config[section][var]} in {sub_section}')
+                    if verbose:
+                        print(f"[INFO] replace {var} by {config[section][var]} in {sub_section}")
                     df[sub_section] = df[sub_section].replace(var, config[section][var])
     return df
 
@@ -90,7 +100,7 @@ def add_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     :param df: the data frame.
     :return: the formatted data frame.
     """
-    for col in df.select_dtypes(include=['number']).columns.tolist():
+    for col in df.select_dtypes(include=["number"]).columns.tolist():
         _mean = df[col].mean()
         df[col] = df[col].fillna(_mean)
     return df
@@ -102,20 +112,21 @@ def normalise_csv(df: pd.DataFrame) -> pd.DataFrame:
     :param df: the data frame.
     :return: the formatted data frame.
     """
-    for col in df.select_dtypes(include=['number']).columns.tolist():
+    for col in df.select_dtypes(include=["number"]).columns.tolist():
         _mean = df[col].mean()
         _std = df[col].std()
         df[col] = df[col].apply(lambda x: (x - _mean) / _std)
     return df
 
 
-def list_to_csv(y_list: list):
+def list_to_csv(y_list: list, dest_path: str):
     """
     Convert a list to a CSV file and save it.
     :param y_list: the list to convert.
+    :param dest_path: the path of the directory to save the CSV file.
     :return:
     """
-    df = pd.DataFrame(y_list, columns=['Hogwarts House'])
+    df = pd.DataFrame(y_list, columns=["Hogwarts House"])
     df.reset_index(inplace=True)
-    df.rename(columns={'index': 'Index'}, inplace=True)
-    df.to_csv('../../data/houses.csv', index=False)
+    df.rename(columns={"index": "Index"}, inplace=True)
+    df.to_csv(os.path.join(dest_path, "houses.csv"), index=False)

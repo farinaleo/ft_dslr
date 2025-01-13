@@ -1,15 +1,16 @@
-import pandas as pd
-import json
-import configparser
-from tools.format_csv import config_drop_columns, format_csv, list_to_csv
-import numpy as np
 import argparse
+import configparser
+import json
+
+import numpy as np
+import pandas as pd
+from tools.format_csv import config_drop_columns, format_csv, list_to_csv
 
 
 def load_weights(weight_path: str):
     """
     Load the weights from the json file
-    :param str, weight_path: the path to the weights
+    :param str, weight_path: the path to the weights.
     :return: the weights in a dictionary
     """
     with open(weight_path) as json_data:
@@ -36,8 +37,8 @@ def prepare_data(df_data: pd.DataFrame, config: configparser.ConfigParser):
     :return: the data and the target
     """
     df_data = config_drop_columns(df_data, config, verbose=False)
-    X = df_data['Hogwarts House'].copy(deep=True)
-    df_data.drop('Hogwarts House', axis=1, inplace=True)
+    X = df_data["Hogwarts House"].copy(deep=True)
+    df_data.drop("Hogwarts House", axis=1, inplace=True)
     return df_data, X
 
 
@@ -51,7 +52,17 @@ def predict(df_data: pd.DataFrame, weights: dict):
                 for house, thetas in weights[key].items():
                     if not pd.isnull(value) and isinstance(value, float):
                         _total[int(house)] += float(
-                            1 / (1 + np.exp(-(float(thetas["theta0"]) + float(thetas["theta1"]) * float(value)))))
+                            1
+                            / (
+                                1
+                                + np.exp(
+                                    -(
+                                        float(thetas["theta0"])
+                                        + float(thetas["theta1"]) * float(value)
+                                    )
+                                )
+                            )
+                        )
         predict_list.append((index, _total))
     return predict_list
 
@@ -64,7 +75,7 @@ def predict_house(predict_list: list):
     """
     _y_pred = []
     for i, e in predict_list:
-        _max = float('-inf')
+        _max = float("-inf")
         _house = None
         for house in e:
             if e[house] > _max:
@@ -83,7 +94,7 @@ def category_to_label(y: list, conf: configparser.ConfigParser):
     """
     y_labels = []
 
-    house_dict = dict(conf['REPLACE:Hogwarts House'])
+    house_dict = dict(conf["REPLACE:Hogwarts House"])
     reversed_dict = {value: key for key, value in house_dict.items()}
 
     for i in y:
@@ -92,15 +103,16 @@ def category_to_label(y: list, conf: configparser.ConfigParser):
     return y_labels
 
 
-def logreg_predict(data_path: str, weight_path: str, config_path: str):
+def logreg_predict(data_path: str, weight_path: str, config_path: str, dest_path: str):
     """
     Predict the house of the students
     :param str, data_path: the path to the dataset
     :param str, weight_path: the path to the weights
     :param str, config_path: the path to the configuration file
+    :param str, dest_path: the destination path.
     :return:
     """
-    df_data = format_csv(data_path, config=config_path, norm_data=True)
+    df_data = format_csv(data_path, config=config_path, norm_data=False)
     weights = load_weights(weight_path)
     config = load_config(config_path)
 
@@ -111,27 +123,35 @@ def logreg_predict(data_path: str, weight_path: str, config_path: str):
 
     pred_labels = category_to_label(y_pred, config)
 
-    list_to_csv(pred_labels)
+    list_to_csv(pred_labels, dest_path)
 
 
 def options_parser():
-    """Use to handle program parameters and options.
-    """
+    """Use to handle program parameters and options."""
     parser = argparse.ArgumentParser(
-        prog='DSLR predict model',
-        description='this program should be used to predict with a model of logistic regression',
-        epilog='Please read the subject before proceeding to understand the input file format.')
-    parser.add_argument('Dataset_file', type=str, nargs=1)
-    parser.add_argument('Weights_file', type=str, nargs=1)
-    parser.add_argument('-c', '--config', type=str, default='../../data/logistic.ini',
-                        help='The config file.')
+        prog="DSLR predict model",
+        description="this program should be used to predict with a model of logistic regression",
+        epilog="Please read the subject before proceeding to understand the input file format.",
+    )
+    parser.add_argument("Dataset_file", type=str, nargs=1)
+    parser.add_argument("Weights_file", type=str, nargs=1)
+    parser.add_argument(
+        "-c", "--config", type=str, default="../../data/logistic.ini", help="The config file."
+    )
+    parser.add_argument(
+        "-d",
+        "--dest",
+        type=str,
+        default="../../data/",
+        help="Destination path, location where to save prediction.",
+    )
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         args = options_parser().parse_args()
-        logreg_predict(args.Dataset_file[0], args.Weights_file[0], args.config)
+        logreg_predict(args.Dataset_file[0], args.Weights_file[0], args.config, args.dest)
     except Exception as e:
-        print('[ERROR] The predict process failed')
+        print("[ERROR] The predict process failed")
         print(e)

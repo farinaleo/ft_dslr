@@ -5,8 +5,11 @@ import json
 import numpy as np
 import pandas as pd
 
-from ft_dslr.logistic_regression.tools import (config_drop_columns, format_csv,
-                                               list_to_csv)
+from ft_dslr.logistic_regression.tools import (
+    config_drop_columns,
+    format_csv,
+    list_to_csv,
+)
 
 
 def load_weights(weight_path: str):

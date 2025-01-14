@@ -4,6 +4,9 @@ name: Development pipeline
 on:
   push:
 
+env:
+  PYTHON_M: python -m
+
 jobs:
   create-virtualenv:
     runs-on: ubuntu-22.04
@@ -32,7 +35,7 @@ jobs:
 
       - name: Run Flake8
         run: |
-          flake8 ft_dslr --disable-noqa --config setup.cfg
+          $PYTHON_M flake8 ft_dslr --disable-noqa --config setup.cfg
 
   projet_lint:
     runs-on: ubuntu-20.04

@@ -92,7 +92,6 @@ jobs:
   train:
     runs-on: ubuntu-22.04
     needs: [data]
-    if: github.ref == 'refs/heads/dev'
 
     steps:
       - uses: actions/checkout@v1
@@ -113,7 +112,7 @@ jobs:
       - name: Train_model
         run: |
           mkdir -p data/model
-          python leaffliction/train.py data/processed/augmented --epoch 20 --plot --save_mode --batch_ratio 0.8 --save_dir data/model
+          python ft_dslr/logistic_regression/logreg_train.py  data/external/datasets/dataset_train.csv --config models/logistic.ini --save_dir data
 
       - name: Zip_data
         run: |

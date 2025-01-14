@@ -41,6 +41,7 @@ def options_parser():
     parser.add_argument(
         "-c", "--config", type=str, default="../../data/logistic.ini", help="The config file."
     )
+    parser.add_argument("-m", "--model", type=str, default="model.json", help="The model file.")
     parser.add_argument(
         "-l",
         "--learning_rate",
@@ -84,7 +85,7 @@ if __name__ == "__main__":
         X_train, X_test, y_train, y_test = split_data(df, args.validation_ratio, args.seed)
 
         if args.accuracy:
-            model = json.load(open("model.json"))
+            model = json.load(open(args.model))
         else:
             model = train_model(X_train, y_train, args.learning_rate, args.epoch)
 
@@ -100,4 +101,4 @@ if __name__ == "__main__":
             save_model(model, os.path.join(args.save_dir, "model.json"))
     except Exception as e:
         print("[ERROR] The training process failed")
-        raise ValueError("") from e
+        print("[ERROR] error: {}".format(e))

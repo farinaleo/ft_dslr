@@ -1,3 +1,4 @@
+import argparse
 import math
 import sys
 
@@ -6,14 +7,18 @@ import pandas as pd
 from ft_dslr.tools import open_csv
 
 
-def describe(df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
+def describe(df: pd.DataFrame, drop: bool = False, verbose: bool = False) -> pd.DataFrame:
     """
     Describe the given dataframe.
     :param df: The dataframe to describe.
+    :param drop: Drop empty columns.
     :param verbose: print additional information about the process.
     :return: The description as a pandas dataframe.
     """
     description = pd.DataFrame()
+
+    if drop:
+        df = df.dropna(axis=1, how="all")
 
     df_tmp = df.drop(columns="Index", inplace=False)
     columns_num = df_tmp.select_dtypes(include=["number"]).columns.tolist()
@@ -24,7 +29,7 @@ def describe(df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
 
     for col in df_tmp.columns:
         if verbose:
-            print(f"Column: {col}")
+            print(f"Column used: {col}")
         description[col] = describe_column(df_tmp, col)
 
     return description
@@ -121,15 +126,35 @@ def compute_quantile(df: pd.DataFrame, column: str, q: float) -> tuple:
     return q_v
 
 
+def options_parser():
+    """Use to handle program parameters and options."""
+    parser = argparse.ArgumentParser(
+        prog="DSLR describe dataset",
+        description="this program should be used to describe a dataset.",
+        epilog="Please read the subject before proceeding to understand the input file format.",
+    )
+    parser.add_argument("dataset", type=str, nargs=1)
+    parser.add_argument("-d", "--drop", action="store_true", help="Drop empty columns.")
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Print additional information about the process.",
+    )
+
+    return parser
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("[ERROR] Usage:python describe.py <file to describe>")
-        exit(1)
     try:
-        df = open_csv(sys.argv[1])
-        description = describe(df)
+        args = options_parser().parse_args()
+        df = open_csv(
+            args.dataset[0],
+        )
+        description = describe(df, drop=args.drop, verbose=args.verbose)
         print(description)
         print("\n[INFO] To see the entire description, use the jupyter notebook.")
-    except Exception:
+    except Exception as e:
         print("[ERROR] Could not open the file properly.")
+        print(f"[ERROR] Error: {e}")
         exit(1)

@@ -17,10 +17,10 @@ jobs:
       - uses: syphar/restore-pip-download-cache@v1
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt && pip install -r requirements-dev.txt
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
-  verify:
+  school_lint:
     runs-on: ubuntu-22.04
     needs: create-virtualenv
 
@@ -34,9 +34,9 @@ jobs:
         run: |
           flake8 ft_dslr --disable-noqa --config setup.cfg
 
-  lint:
+  projet_lint:
     runs-on: ubuntu-20.04
-    needs: verify
+    needs: school_lint
 
     steps:
       - uses: actions/checkout@v1

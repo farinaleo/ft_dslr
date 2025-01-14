@@ -1,0 +1,48 @@
+# .github/workflows/development.yml
+name: Development pipeline
+
+on:
+  push:
+
+jobs:
+  create-virtualenv:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - uses: syphar/restore-pip-download-cache@v1
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - run: pip install -r requirements.txt
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+  verify:
+    runs-on: ubuntu-22.04
+    needs: create-virtualenv
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - name: Run Flake8
+        run: |
+          flake8 ft_dslr --disable-noqa --config setup.cfg
+
+  lint:
+    runs-on: ubuntu-20.04
+    needs: verify
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - name: Run make lint
+        run: make lint

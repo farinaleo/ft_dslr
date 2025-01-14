@@ -1,4 +1,4 @@
-import sys
+import argparse
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -17,6 +17,13 @@ def histogram(df: pd.DataFrame, subjects: list = None, verbose: bool = False) ->
     # Drop the index column
     df_tmp = df.drop(columns="Index", inplace=False)
 
+    print(df["Hogwarts House"].isna().all())
+
+    if df["Hogwarts House"].isna().all():
+        raise ValueError("No hogwarts houses found.")
+
+    print(df["Hogwarts House"].isna().all())
+
     # Get all subjects columns to plot
     subjects = (
         df_tmp.select_dtypes(include=["number"]).columns.tolist() if subjects is None else subjects
@@ -30,7 +37,9 @@ def histogram(df: pd.DataFrame, subjects: list = None, verbose: bool = False) ->
     plt.rc("font", **font)
 
     # Create a figure and a set of subplots
-    fig, axes = plt.subplots(nrows=len(subjects), ncols=1, squeeze=False, figsize=(5, 30))
+    fig, axes = plt.subplots(
+        nrows=len(subjects), ncols=1, squeeze=False, figsize=(10, 5 * len(subjects))
+    )
 
     # Plot each subject
     for i, subject in enumerate(subjects):
@@ -61,23 +70,39 @@ def plot_single_histogram(df: pd.DataFrame, subject: str, ax: plt.Axes) -> None:
     ax.yaxis.label.set_rotation(45)
 
 
+def options_parser():
+    """Use to handle program parameters and options."""
+    parser = argparse.ArgumentParser(
+        prog="DSLR histogram scrypt.",
+        description="this program should be used to plot histogram from the given dataset.",
+        epilog="Please read the subject before proceeding to understand the input file format.",
+    )
+    parser.add_argument("dataset", type=str, nargs=1)
+    parser.add_argument(
+        "--columns", nargs="+", default=["Care of Magical Creatures"], help="Subject."
+    )
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Use all subjects as input.",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Print additional information about the process.",
+    )
+
+    return parser
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2 and len(sys.argv) != 3:
-        print(
-            "[ERROR] Usage: python histogram.py <file name> to get the answer or python histogram.py <file "
-            "name> --all to visualise all features plot with each other."
-        )
-        exit(1)
     try:
-        df = open_csv(sys.argv[1])
-        if len(sys.argv) == 2:
-            histogram(df, ["Care of Magical Creatures"], verbose=True)
-        elif sys.argv[2] == "--all":
-            histogram(df, verbose=True)
-        else:
-            raise ValueError("[ERROR] Usage: option not handled.")
+        args = options_parser().parse_args()
+        df = open_csv(args.dataset[0])
+        histogram(df, subjects=args.columns if not args.all else None, verbose=args.verbose)
 
     except Exception as e:
-        print("[ERROR] Could not open the file properly.")
+        print("[ERROR] Could not open or use the file properly.")
         print(e)
         exit(1)

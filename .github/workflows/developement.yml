@@ -55,3 +55,73 @@ jobs:
 
       - name: Run make lint
         run: make lint
+
+
+  data:
+      runs-on: ubuntu-22.04
+      needs: verify
+
+      steps:
+        - uses: actions/checkout@v1
+        - uses: actions/setup-python@v2
+        - uses: syphar/restore-virtualenv@v1
+          id: cache-virtualenv
+
+        - name: Import_data
+          run: |
+            make data
+
+        - name: Zip_data
+          run: |
+            mkdir -p data_artifact
+            zip -r data_artifact/data.zip data
+
+        - name: push zip and shasum
+          if: ${{ success() }}
+          run: |
+            shasum data_artifact/data.zip > data_artifact/sha.txt
+
+          continue-on-error: true
+
+        - name: Upload data directory
+          uses: actions/upload-artifact@v4
+          with:
+            name: data-artifact
+            path: data_artifact
+
+  train:
+    runs-on: ubuntu-22.04
+    needs: [data]
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - name: Download data artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: data-artifact
+          path: data_artifact
+
+      - name: Unzip data artifact
+        run: |
+          unzip data_artifact/data.zip -d data
+
+      - name: Train_model
+        run: |
+          mkdir -p data/model
+          python leaffliction/train.py data/processed/augmented --epoch 20 --plot --save_mode --batch_ratio 0.8 --save_dir data/model
+
+      - name: Zip_data
+        run: |
+          mkdir -p train_artifact
+          zip -r train_artifact/train.zip data
+
+      - name: Upload data directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: train-artifact
+          path: train_artifact

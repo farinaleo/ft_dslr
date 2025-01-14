@@ -39,7 +39,7 @@ def options_parser():
         help="Compute only the accuracy score and not launch the training process.",
     )
     parser.add_argument(
-        "-c", "--config", type=str, default="../../data/logistic.ini", help="The config file."
+        "-c", "--config", type=str, default="models/logistic.ini", help="The config file."
     )
     parser.add_argument("-m", "--model", type=str, default="model.json", help="The model file.")
     parser.add_argument(

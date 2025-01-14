@@ -147,13 +147,13 @@ def options_parser():
     parser.add_argument("Dataset_file", type=str, nargs=1)
     parser.add_argument("Weights_file", type=str, nargs=1)
     parser.add_argument(
-        "-c", "--config", type=str, default="../../data/logistic.ini", help="The config file."
+        "-c", "--config", type=str, default="models/logistic.ini", help="The config file."
     )
     parser.add_argument(
         "-d",
         "--dest",
         type=str,
-        default="../../data/",
+        default="data/",
         help="Destination path, location where to save prediction.",
     )
     return parser

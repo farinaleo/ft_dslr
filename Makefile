@@ -52,7 +52,7 @@ lint: ## Lint using flake8 and black
 .PHONY: format
 format: ## Format source code with black
 	black --config pyproject.toml ${PROJECT_NAME}
-	isort ${PROJECT_NAME} --settings-path pyproject.toml
+	isort ${PROJECT_NAME} --profile black
 
 
 .PHONY: data

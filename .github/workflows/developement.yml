@@ -112,6 +112,7 @@ jobs:
       - name: Train_model
         run: |
           mkdir -p data/model
+          pip install -e .
           python ft_dslr/logistic_regression/logreg_train.py  data/external/datasets/dataset_train.csv --config models/logistic.ini --save_dir data
 
       - name: Zip_data

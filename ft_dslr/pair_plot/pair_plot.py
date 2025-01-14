@@ -1,3 +1,4 @@
+import argparse
 import sys
 
 import matplotlib.pyplot as plt
@@ -13,6 +14,9 @@ def pair_plot(df: pd.DataFrame, verbose: bool = False) -> None:
     :param verbose: print additional information.
     :return: None
     """
+    if df["Hogwarts House"].isna().all():
+        raise ValueError("No hogwarts houses found.")
+
     df_tmp = df.drop(columns="Index", inplace=False)
     x_col = df_tmp.select_dtypes(include=["number"]).columns.tolist()
     y_col = x_col
@@ -75,14 +79,30 @@ def plot_single_graph(
     fig.tick_params(labelrotation=45.0)
 
 
+def options_parser():
+    """Use to handle program parameters and options."""
+    parser = argparse.ArgumentParser(
+        prog="DSLR Pair plot script",
+        description="this program should be used to produce pair plot of a dataset.",
+        epilog="Please read the subject before proceeding to understand the input file format.",
+    )
+    parser.add_argument("dataset", type=str, nargs=1)
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Print additional information about the process.",
+    )
+
+    return parser
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("[ERROR] Usage: python pair_plot.py <file name>")
-        exit(1)
     try:
-        df = open_csv(sys.argv[1])
-        pair_plot(df)
+        args = options_parser().parse_args()
+        df = open_csv(args.dataset[0])
+        pair_plot(df, args.verbose)
     except Exception as e:
         print("[ERROR] Could not open the file properly.")
-        print(e)
+        print("[ERROR] error: ", e)
         exit(1)

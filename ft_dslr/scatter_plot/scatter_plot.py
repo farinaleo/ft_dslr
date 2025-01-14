@@ -1,3 +1,4 @@
+import argparse
 import sys
 
 import matplotlib.pyplot as plt
@@ -15,6 +16,9 @@ def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False
     :param verbose: print additional information.
     :return: None
     """
+
+    if df["Hogwarts House"].isna().all():
+        raise ValueError("No hogwarts houses found.")
 
     if verbose:
         print(f"Columns: {x_col}, {y_col}")
@@ -44,28 +48,44 @@ def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False
     plt.show()
 
 
+def options_parser():
+    """Use to handle program parameters and options."""
+    parser = argparse.ArgumentParser(
+        prog="DSLR Scatter script.",
+        description="this program should be used to plot scatters from the given dataset.",
+        epilog="Please read the subject before proceeding to understand the input file format.",
+    )
+    parser.add_argument("dataset", type=str, nargs=1)
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Use all subjects as input.",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Print additional information about the process.",
+    )
+
+    return parser
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2 and len(sys.argv) != 3:
-        print(
-            "[ERROR] Usage: python scatter_plot.py <file name> to get the answer or python scatter_plot.py <file "
-            "name> --all to visualise all features plot with each other."
-        )
-        exit(1)
     try:
-        df = open_csv(sys.argv[1])
-        if len(sys.argv) == 2:
-            scatter_plot(df, "Defense Against the Dark Arts", "Astronomy", verbose=True)
-        elif sys.argv[2] == "--all":
+        args = options_parser().parse_args()
+        df = open_csv(args.dataset[0])
+        if not args.all:
+            scatter_plot(df, "Defense Against the Dark Arts", "Astronomy", verbose=args.verbose)
+        else:
             df_tmp = df.drop(columns="Index", inplace=False)
             cols = df_tmp.select_dtypes(include=["number"]).columns.tolist()
             for x in range(len(cols)):
                 for y in range(len(cols)):
                     if x != y:
-                        scatter_plot(df_tmp, cols[x], cols[y], verbose=True)
-        else:
-            raise ValueError("[ERROR] Usage: option not handled.")
+                        scatter_plot(df_tmp, cols[x], cols[y], verbose=args.verbose)
 
     except Exception as e:
-        print("[ERROR] Could not open the file properly.")
+        print("[ERROR] Could not open or use the file properly.")
         print(e)
         exit(1)

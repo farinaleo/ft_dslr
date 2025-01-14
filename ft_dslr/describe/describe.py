@@ -1,6 +1,5 @@
 import argparse
 import math
-import sys
 
 import pandas as pd
 

@@ -1,7 +1,8 @@
 import pandas as pd
-from gradient_descent import gradient_descent
-from tools.norm import denorm_thetas, normalise_df
 from tqdm import tqdm
+
+from ft_dslr.logistic_regression import gradient_descent
+from ft_dslr.logistic_regression.tools import denorm_thetas, normalise_df
 
 
 def train_model(

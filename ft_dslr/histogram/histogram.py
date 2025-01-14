@@ -2,7 +2,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from tools import open_csv
+
+from ft_dslr.tools import open_csv
 
 
 def histogram(df: pd.DataFrame, subjects: list = None, verbose: bool = False) -> None:

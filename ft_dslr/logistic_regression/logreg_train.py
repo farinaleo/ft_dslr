@@ -4,12 +4,18 @@ import os
 
 from logreg_predict import predict, predict_house
 from sklearn.metrics import accuracy_score
-from tools.format_csv import format_csv
-from tools.split import split_data
-from train import train_model
+
+from ft_dslr.logistic_regression import train_model
+from ft_dslr.logistic_regression.tools import format_csv, split_data
 
 
 def save_model(model: dict, file_name: str) -> None:
+    """
+    Save the model as a json file.
+    :param model: Weights to save.
+    :param file_name: Name of the file.
+    :return: None
+    """
     with open(file_name, "w") as file:
         json.dump(model, file, indent=4)
 

@@ -2,7 +2,8 @@ import math
 import sys
 
 import pandas as pd
-from tools import open_csv
+
+from ft_dslr.tools import open_csv
 
 
 def describe(df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:

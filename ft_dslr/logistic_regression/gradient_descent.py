@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from tools.sigmoid import sigmoid
+
+from ft_dslr.logistic_regression.tools import sigmoid
 
 
 def gradient_descent(

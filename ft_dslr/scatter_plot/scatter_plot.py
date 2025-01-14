@@ -2,7 +2,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from tools import open_csv
+
+from ft_dslr.tools import open_csv
 
 
 def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False) -> None:

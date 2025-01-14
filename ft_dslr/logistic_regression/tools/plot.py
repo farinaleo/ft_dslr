@@ -12,6 +12,15 @@ def plot(
     beta_0: float = None,
     beta_1: float = None,
 ):
+    """
+    Plot the sigmoid curve with the labels.
+    :param df: Source dataframe.
+    :param col: Column name to consider as the y-axis.
+    :param house: House use as label to identify with the sigmoid curve.
+    :param beta_0: Coefficient of the sigmoid curve. 1 / (1 + np.exp((-(beta_1 * x + beta_0)))).
+    :param beta_1: Coefficient of the sigmoid curve. 1 / (1 + np.exp((-(beta_1 * x + beta_0)))).
+    :return: None
+    """
     req_house = df[df["Hogwarts House"] == house]
     other_house = df[df["Hogwarts House"] != house]
 

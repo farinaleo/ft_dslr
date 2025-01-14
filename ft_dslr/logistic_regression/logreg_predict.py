@@ -4,7 +4,9 @@ import json
 
 import numpy as np
 import pandas as pd
-from tools.format_csv import config_drop_columns, format_csv, list_to_csv
+
+from ft_dslr.logistic_regression.tools import (config_drop_columns, format_csv,
+                                               list_to_csv)
 
 
 def load_weights(weight_path: str):
@@ -42,7 +44,13 @@ def prepare_data(df_data: pd.DataFrame, config: configparser.ConfigParser):
     return df_data, X
 
 
-def predict(df_data: pd.DataFrame, weights: dict):
+def predict(df_data: pd.DataFrame, weights: dict) -> list:
+    """
+    Apply the pre-processed model to predict the house each row.
+    :param df_data: Data frame to predict.
+    :param weights: Dictionary of weights used as a model.
+    :return: all predictions as a list.
+    """
     predict_list = []
 
     for index, row in df_data.iterrows():

@@ -59,7 +59,7 @@ jobs:
 
   data:
       runs-on: ubuntu-22.04
-      needs: verify
+      needs: projet_lint
 
       steps:
         - uses: actions/checkout@v1

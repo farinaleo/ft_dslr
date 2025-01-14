@@ -20,7 +20,7 @@ jobs:
       - uses: syphar/restore-pip-download-cache@v1
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
-      - run: pip install -r requirements.txt && pip install -r requirements-dev.txt
+      - run: pip install -r requirements.txt
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
   school_lint:
@@ -32,6 +32,9 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
+
+      - name: Install requirements-dev
+        run: pip install -r requirements-dev.txt
 
       - name: Run Flake8
         run: |

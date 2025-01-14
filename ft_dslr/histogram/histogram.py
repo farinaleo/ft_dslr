@@ -17,12 +17,8 @@ def histogram(df: pd.DataFrame, subjects: list = None, verbose: bool = False) ->
     # Drop the index column
     df_tmp = df.drop(columns="Index", inplace=False)
 
-    print(df["Hogwarts House"].isna().all())
-
     if df["Hogwarts House"].isna().all():
         raise ValueError("No hogwarts houses found.")
-
-    print(df["Hogwarts House"].isna().all())
 
     # Get all subjects columns to plot
     subjects = (
@@ -73,7 +69,7 @@ def plot_single_histogram(df: pd.DataFrame, subject: str, ax: plt.Axes) -> None:
 def options_parser():
     """Use to handle program parameters and options."""
     parser = argparse.ArgumentParser(
-        prog="DSLR histogram scrypt.",
+        prog="DSLR histogram script.",
         description="this program should be used to plot histogram from the given dataset.",
         epilog="Please read the subject before proceeding to understand the input file format.",
     )

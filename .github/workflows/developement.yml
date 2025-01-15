@@ -35,9 +35,6 @@ jobs:
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
 
-      - name: Install requirements-dev
-        run: pip install -r requirements-dev.txt
-
       - name: Run Flake8
         run: |
           $PYTHON_M flake8 ft_dslr --disable-noqa --config setup.cfg
@@ -51,9 +48,6 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
-
-      - name: Install requirements-dev
-        run: pip install -r requirements-dev.txt
 
       - name: Run make lint
         run: make lint

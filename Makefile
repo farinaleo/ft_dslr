@@ -71,6 +71,7 @@ build_docs: ## Build the html documentation
     --project-url=https://github.com/farinaleo/${PROJECT_NAME}/ \
 	--html-base-url=https://farinaleo.github.io/${PROJECT_NAME}/ \
     --docformat=restructuredtext \
+    --theme=readthedocs \
     ./ft_dslr
 
 

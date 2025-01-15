@@ -1,3 +1,5 @@
+"""Script to plot a pair plot of a dataframe."""
+
 import argparse
 
 import matplotlib.pyplot as plt
@@ -8,10 +10,15 @@ from ft_dslr.tools import open_csv
 
 def pair_plot(df: pd.DataFrame, verbose: bool = False) -> None:
     """
-    Create a scatter subplot by plotting each column of the dataframe.
-    :param df: the dataframe to plot.
-    :param verbose: print additional information.
-    :return: None
+    Create a pair plot of a dataframe.
+    Parameters
+    ----------
+    df : The source dataframe
+    verbose : Print additional information.
+
+    Returns
+    -------
+    None.
     """
     if df["Hogwarts House"].isna().all():
         raise ValueError("No hogwarts houses found.")
@@ -43,14 +50,19 @@ def plot_single_graph(
     df: pd.DataFrame, x_cols: list, y_cols: list, fig: plt.Axes, x: int, y: int
 ) -> None:
     """
-    Create a scatter plot with the specified x and y columns.
-    :param df: the dataframe to plot.
-    :param x_cols: The list of all columns to use as x.
-    :param y_cols: The list of all columns to use as y.
-    :param fig: The figure to plot.
-    :param x: coordinate of the x-axis.
-    :param y: coordinate of the y-axis.
-    :return: None.
+    Plot a single graph of a dataframe.
+    Parameters
+    ----------
+    df : The source dataframe
+    x_cols : The columns to use as abscissa.
+    y_cols : The columns to use as ordinates.
+    fig : The matplotlib figure.
+    x : Coordinate of the x-axis.
+    y : Coordinate of the y-axis.
+
+    Returns
+    -------
+    None
     """
     _gryffindor = df[df["Hogwarts House"] == "Gryffindor"]
     _hufflepuff = df[df["Hogwarts House"] == "Hufflepuff"]
@@ -79,7 +91,12 @@ def plot_single_graph(
 
 
 def options_parser():
-    """Use to handle program parameters and options."""
+    """
+    Used to handle command line options.
+    Returns
+    -------
+    None
+    """
     parser = argparse.ArgumentParser(
         prog="DSLR Pair plot script",
         description="this program should be used to produce pair plot of a dataset.",

@@ -1,3 +1,5 @@
+"""Script used to predict value from a dataframe with a pre-computed logistic regression model."""
+
 import argparse
 import configparser
 import json
@@ -14,9 +16,14 @@ from ft_dslr.logistic_regression.tools import (
 
 def load_weights(weight_path: str):
     """
-    Load the weights from the json file
-    :param str, weight_path: the path to the weights.
-    :return: the weights in a dictionary
+    Load weights from a file.
+    Parameters
+    ----------
+    weight_path : The file path.
+
+    Returns
+    -------
+    The loaded weights.
     """
     with open(weight_path) as json_data:
         return json.load(json_data)
@@ -24,9 +31,14 @@ def load_weights(weight_path: str):
 
 def load_config(config_path: str):
     """
-    Load the configuration file
-    :param str, config_path: the path to the configuration file
-    :return: the configuration in a ConfigParser object
+    Load the configuration from a file.
+    Parameters
+    ----------
+    config_path : The file path.
+
+    Returns
+    -------
+    The loaded configuration.
     """
     conf = configparser.ConfigParser()
     conf.optionxform = lambda option: option
@@ -36,10 +48,15 @@ def load_config(config_path: str):
 
 def prepare_data(df_data: pd.DataFrame, config: configparser.ConfigParser):
     """
-    Prepare the data for the prediction
-    :param pd.DataFrame, df_data: the data
-    :param configparser.ConfigParser, config: the configuration
-    :return: the data and the target
+    Prepare the data for the prediction.
+    Parameters
+    ----------
+    df_data : The date to prepare.
+    config : The configuration to apply.
+
+    Returns
+    -------
+    The prepared data.
     """
     df_data = config_drop_columns(df_data, config, verbose=False)
     X = df_data["Hogwarts House"].copy(deep=True)
@@ -49,10 +66,15 @@ def prepare_data(df_data: pd.DataFrame, config: configparser.ConfigParser):
 
 def predict(df_data: pd.DataFrame, weights: dict) -> list:
     """
-    Apply the pre-processed model to predict the house each row.
-    :param df_data: Data frame to predict.
-    :param weights: Dictionary of weights used as a model.
-    :return: all predictions as a list.
+    Apply the computed model to predict each house of the dataframe.
+    Parameters
+    ----------
+    df_data : The source dataframe to predict.
+    weights : The weights to apply to each row.
+
+    Returns
+    -------
+
     """
     predict_list = []
 
@@ -80,9 +102,14 @@ def predict(df_data: pd.DataFrame, weights: dict) -> list:
 
 def predict_house(predict_list: list):
     """
-    Predict the house of the students
-    :param list, predict_list: the list of predictions
-    :return: Predicted labels
+    Predict each house of the dataframe.
+    Parameters
+    ----------
+    predict_list : The list of predictions.
+
+    Returns
+    -------
+    Predicted labels.
     """
     _y_pred = []
     for i, e in predict_list:
@@ -98,10 +125,15 @@ def predict_house(predict_list: list):
 
 def category_to_label(y: list, conf: configparser.ConfigParser):
     """
-    Convert categories to string labels
-    :param list, y: the binary labels
-    :param conf: the configuration
-    :return: predicted house labels
+    Convert categories to string labels.
+    Parameters
+    ----------
+    y : The binary labels.
+    conf : The configuration to apply.
+
+    Returns
+    -------
+    The predicted house labels.
     """
     y_labels = []
 
@@ -116,12 +148,17 @@ def category_to_label(y: list, conf: configparser.ConfigParser):
 
 def logreg_predict(data_path: str, weight_path: str, config_path: str, dest_path: str):
     """
-    Predict the house of the students
-    :param str, data_path: the path to the dataset
-    :param str, weight_path: the path to the weights
-    :param str, config_path: the path to the configuration file
-    :param str, dest_path: the destination path.
-    :return:
+    Predict the house of each student.
+    Parameters
+    ----------
+    data_path : The path of the csv source.
+    weight_path : The weight path.
+    config_path : The configuration path.
+    dest_path : The destination path.
+
+    Returns
+    -------
+    None
     """
     df_data = format_csv(data_path, config=config_path, norm_data=False)
     weights = load_weights(weight_path)
@@ -138,7 +175,12 @@ def logreg_predict(data_path: str, weight_path: str, config_path: str, dest_path
 
 
 def options_parser():
-    """Use to handle program parameters and options."""
+    """
+    Used to handle command line options.
+    Returns
+    -------
+    None
+    """
     parser = argparse.ArgumentParser(
         prog="DSLR predict model",
         description="this program should be used to predict with a model of logistic regression",

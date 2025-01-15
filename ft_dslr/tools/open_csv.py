@@ -5,10 +5,15 @@ import pandas as pd
 
 def open_csv(path: str, **kwargs) -> pd.DataFrame:
     """
-    Open properly the given csv file.
-    :param path: Path of the csv file.
-    :param kwargs: Arguments for the dp.read_csv function.
-    :return: The csv file as a pd.DataFrame.
+    Open csv file.
+    Parameters
+    ----------
+    path : Path of the csv file.
+    kwargs : Arguments passed to pd.read_csv.
+
+    Returns
+    -------
+    The csv as a dataframe.
     """
     df = pd.read_csv(path, **kwargs)
     return df

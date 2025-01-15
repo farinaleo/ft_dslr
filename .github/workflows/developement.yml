@@ -23,6 +23,9 @@ jobs:
       - run: pip install -r requirements.txt
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
+      - run: pip install -r requirements-dev.txt
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
   school_lint:
     runs-on: ubuntu-22.04
     needs: create-virtualenv
@@ -32,9 +35,6 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
-
-      - name: Install requirements-dev
-        run: pip install -r requirements-dev.txt
 
       - name: Run Flake8
         run: |
@@ -49,9 +49,6 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
-
-      - name: Install requirements-dev
-        run: pip install -r requirements-dev.txt
 
       - name: Run make lint
         run: make lint
@@ -126,3 +123,43 @@ jobs:
         with:
           name: train-artifact
           path: train_artifact
+
+  build_docs:
+    runs-on: ubuntu-22.04
+    needs: create-virtualenv
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - name: Build documentation
+        id: docs_build
+        run: |
+          make build_docs
+
+      - name: Upload documentation as artifact
+        id: docs_artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apidocs/
+
+  deploy_docs:
+    runs-on: ubuntu-22.04
+    needs: build_docs
+    if: github.ref == 'refs/heads/dev'
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

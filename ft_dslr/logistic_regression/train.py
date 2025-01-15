@@ -1,3 +1,5 @@
+"""Functions to train the logistic regression model."""
+
 import pandas as pd
 from tqdm import tqdm
 
@@ -9,12 +11,17 @@ def train_model(
     X: pd.DataFrame, y: pd.Series, learning_rate: float = 0.1, epoch: int = 1000
 ) -> dict:
     """
-    Train a logistic regression model on the X and y data.
-    :param X: The explanatory variables.
-    :param y: The variable to predict.
-    :param learning_rate: The learning rate applied to the gradient descent.
-    :param epoch: The number of iterations to train the model.
-    :return: A dictionary containing the training model for each explanatory variables.
+    Train the logistic regression model on the X and Y data.
+    Parameters
+    ----------
+    X : The explanatory variables.
+    y : The variables to predict
+    learning_rate : The learning rate.
+    epoch : The number of epochs to train the model.
+
+    Returns
+    -------
+    A dictionary containing the trained model.
     """
     model = {}
 
@@ -36,16 +43,29 @@ def train_model(
 
 
 def learn_multiple_y(
-    X: pd.Series, y: pd.Series, epoch: int, learning_rate: float, x_mean, x_std, pbar=None
+    X: pd.Series,
+    y: pd.Series,
+    epoch: int,
+    learning_rate: float,
+    x_mean: float,
+    x_std: float,
+    pbar=None,
 ) -> dict:
     """
-    Apply for each variable to predict, in the y dataset, the gradient descent.
-    :param X: The explanatory variables.
-    :param y: The variable to predict.
-    :param epoch: The number of iterations to train the model.
-    :param learning_rate: The learning rate applied to the gradient descent.
-    :param pbar: The progress bar to update.
-    :return: a dictionary containing the training model for each variable to predict.
+    Apply for each variable to predict, in the dataset, the gradient descent method.
+    Parameters
+    ----------
+    X : The explanatory variables.
+    y : The variables to predict.
+    epoch : The number of epochs to train the model.
+    learning_rate : The learning rate.
+    x_mean : The mean of the X data.
+    x_std : The standard deviation of the X data.
+    pbar : The progress bar.
+
+    Returns
+    -------
+    The trained model.
     """
     model = {}
     y = y.astype(int)

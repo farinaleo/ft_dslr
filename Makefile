@@ -63,6 +63,17 @@ data: ## Download required data from the 42 intra
 	rm -rf datasets.tgz
 
 
+.PHONY: build_docs
+build_docs: ## Build the html documentation
+	pydoctor \
+    --project-name=${PROJECT_NAME} \
+    --project-version=0.1 \
+    --project-url=https://github.com/farinaleo/${PROJECT_NAME}/ \
+	--html-base-url=https://farinaleo.github.io/${PROJECT_NAME}/ \
+    --docformat=numpy \
+    --theme=readthedocs \
+    ./ft_dslr
+
 
 #################################################################################
 # PROJECT RULES                                                                 #

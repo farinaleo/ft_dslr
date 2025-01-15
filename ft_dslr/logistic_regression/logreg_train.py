@@ -1,3 +1,5 @@
+"""Script used to train the logistic regression model."""
+
 import argparse
 import json
 import os
@@ -12,16 +14,26 @@ from ft_dslr.logistic_regression.tools import format_csv, split_data
 def save_model(model: dict, file_name: str) -> None:
     """
     Save the model as a json file.
-    :param model: Weights to save.
-    :param file_name: Name of the file.
-    :return: None
+    Parameters
+    ----------
+    model : Dictionary with the model to be saved.
+    file_name : The destination file.
+
+    Returns
+    -------
+    None
     """
     with open(file_name, "w") as file:
         json.dump(model, file, indent=4)
 
 
 def options_parser():
-    """Use to handle program parameters and options."""
+    """
+    Used to handle command line options.
+    Returns
+    -------
+    None
+    """
     parser = argparse.ArgumentParser(
         prog="DSLR train model",
         description="this program should be used to train a model of logistic regression able to predict the "

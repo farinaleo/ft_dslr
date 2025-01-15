@@ -1,3 +1,5 @@
+"""Simple script to plot histogram from the dataset."""
+
 import argparse
 
 import matplotlib.pyplot as plt
@@ -8,11 +10,16 @@ from ft_dslr.tools import open_csv
 
 def histogram(df: pd.DataFrame, subjects: list = None, verbose: bool = False) -> None:
     """
-    Plot the histogram of the subjects in the dataset.
-    :param df: the dataframe to plot.
-    :param subjects: the list of subjects to plot.
-    :param verbose: print additional information.
-    :return: None
+    Plot the histogram of the subjects from the dataframe.
+    Parameters
+    ----------
+    df : The source dataframe.
+    subjects : The list of subjects to plot.
+    verbose : Print additional information.
+
+    Returns
+    -------
+    None
     """
     # Drop the index column
     df_tmp = df.drop(columns="Index", inplace=False)
@@ -49,11 +56,15 @@ def histogram(df: pd.DataFrame, subjects: list = None, verbose: bool = False) ->
 def plot_single_histogram(df: pd.DataFrame, subject: str, ax: plt.Axes) -> None:
     """
     Plot a single histogram.
+    Parameters
+    ----------
+    df : The source dataframe.
+    subject : The subject to plot.
+    ax : The axis to plot on.
 
-    :param df: the dataframe to plot.
-    :param subject: the subject to plot.
-    :param ax: the axis to plot.
-    :return: None
+    Returns
+    -------
+    None
     """
     houses = ["Gryffindor", "Ravenclaw", "Slytherin", "Hufflepuff"]
     colors = ["red", "blue", "green", "yellow"]
@@ -67,7 +78,12 @@ def plot_single_histogram(df: pd.DataFrame, subject: str, ax: plt.Axes) -> None:
 
 
 def options_parser():
-    """Use to handle program parameters and options."""
+    """
+    Used to handle command line options.
+    Returns
+    -------
+    None
+    """
     parser = argparse.ArgumentParser(
         prog="DSLR histogram script.",
         description="this program should be used to plot histogram from the given dataset.",

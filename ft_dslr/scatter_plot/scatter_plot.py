@@ -1,3 +1,5 @@
+"""Script used to plot a scatter plot."""
+
 import argparse
 
 import matplotlib.pyplot as plt
@@ -8,14 +10,18 @@ from ft_dslr.tools import open_csv
 
 def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False) -> None:
     """
-    Create a scatter plot.
-    :param df: the dataframe to plot.
-    :param x_col: the name of the x column to plot.
-    :param y_col: the name of the y column to plot.
-    :param verbose: print additional information.
-    :return: None
-    """
+    Create a scatter plot of a dataframe column.
+    Parameters
+    ----------
+    df : The source dataframe.
+    x_col : The column name to use as abscissa.
+    y_col : The column name to use as ordinate.
+    verbose : Print additional information.
 
+    Returns
+    -------
+    None.
+    """
     if df["Hogwarts House"].isna().all():
         raise ValueError("No hogwarts houses found.")
 
@@ -48,7 +54,12 @@ def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False
 
 
 def options_parser():
-    """Use to handle program parameters and options."""
+    """ "
+    Used to handle command line options.
+    Returns
+    -------
+    None
+    """
     parser = argparse.ArgumentParser(
         prog="DSLR Scatter script.",
         description="this program should be used to plot scatters from the given dataset.",

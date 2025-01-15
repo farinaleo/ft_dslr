@@ -1,3 +1,5 @@
+"""Custom description of a dataset."""
+
 import argparse
 import math
 
@@ -9,10 +11,15 @@ from ft_dslr.tools import open_csv
 def describe(df: pd.DataFrame, drop: bool = False, verbose: bool = False) -> pd.DataFrame:
     """
     Describe the given dataframe.
-    :param df: The dataframe to describe.
-    :param drop: Drop empty columns.
-    :param verbose: print additional information about the process.
-    :return: The description as a pandas dataframe.
+    Parameters
+    ----------
+    df : The dataframe to describe.
+    drop :  Drop empty columns.
+    verbose : Print additional information.
+
+    Returns
+    -------
+    The description as a dataframe.
     """
     description = pd.DataFrame()
 
@@ -36,10 +43,15 @@ def describe(df: pd.DataFrame, drop: bool = False, verbose: bool = False) -> pd.
 
 def describe_column(df: pd.DataFrame, column: str) -> list:
     """
-    Describe a specific column in the dataframe.
-    :param df: the dataframe to describe.
-    :param column: the column to describe.
-    :return: a list of elements used to describe the column.
+    Describe a specific column from the dataframe.
+    Parameters
+    ----------
+    df : The source dataframe.
+    column : The column to describe.
+
+    Returns
+    -------
+    A list of elements used to describe the column.
     """
     df_tmp = pd.DataFrame(df[column].copy())
     df_tmp.dropna(inplace=True)
@@ -60,9 +72,14 @@ def describe_column(df: pd.DataFrame, column: str) -> list:
 def compute_mean(df: pd.DataFrame, column: str) -> float:
     """
     Compute the mean of the given column.
-    :param df: the dataframe to describe.
-    :param column: the column to describe.
-    :return: the mean of the given column.
+    Parameters
+    ----------
+    df : The source dataframe.
+    column : The column to describe.
+
+    Returns
+    -------
+    The mean of the column.
     """
     sum_v = 0
 
@@ -75,10 +92,15 @@ def compute_mean(df: pd.DataFrame, column: str) -> float:
 def compute_std(df: pd.DataFrame, column: str, mean: float) -> float:
     """
     Compute the standard deviation of the given column.
-    :param df: the dataframe to describe.
-    :param column: th column to describe.
-    :param mean: the mean of the column.
-    :return: the standard deviation of the given column.
+    Parameters
+    ----------
+    df : The source dataframe.
+    column : The column to describe.
+    mean : The mean of the column.
+
+    Returns
+    -------
+    The standard deviation of the column.
     """
     sum_v = 0
 
@@ -90,10 +112,15 @@ def compute_std(df: pd.DataFrame, column: str, mean: float) -> float:
 
 def find_min_max(df: pd.DataFrame, column: str) -> tuple:
     """
-    Find the min and the ma of the given column.
-    :param df: the dataframe to describe.
-    :param column: the column to describe.
-    :return: a tuple of the min and the max of the given column.
+    Find the minimum and maximum values of the given column.
+    Parameters
+    ----------
+    df : The source dataframe.
+    column : The column to describe.
+
+    Returns
+    -------
+    A tuple containing the minimum and maximum values of the column.
     """
     min_v = float("inf")
     max_v = float("-inf")
@@ -110,10 +137,15 @@ def find_min_max(df: pd.DataFrame, column: str) -> tuple:
 def compute_quantile(df: pd.DataFrame, column: str, q: float) -> tuple:
     """
     Compute the quantile of the given column, with respect to the given value.
-    :param df: the dataframe to describe.
-    :param column: the column to describe.
-    :param q: the quantile to find.
-    :return: the quantile of the given column.
+    Parameters
+    ----------
+    df : The source dataframe.
+    column : The column to describe.
+    q : The quantile to find.
+
+    Returns
+    -------
+    The quantile of the column.
     """
     q_idx = q * len(df[column])
     if q_idx.is_integer():
@@ -126,7 +158,12 @@ def compute_quantile(df: pd.DataFrame, column: str, q: float) -> tuple:
 
 
 def options_parser():
-    """Use to handle program parameters and options."""
+    """
+    Used to handle command line options.
+    Returns
+    -------
+    None
+    """
     parser = argparse.ArgumentParser(
         prog="DSLR describe dataset",
         description="this program should be used to describe a dataset.",

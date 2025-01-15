@@ -1,3 +1,5 @@
+"""The implementation of the gradient descent."""
+
 import numpy as np
 import pandas as pd
 
@@ -8,12 +10,17 @@ def gradient_descent(
     X: pd.Series, Y: pd.Series, learning_rate: float, epoch: int
 ) -> dict[str, float]:
     """
-    Compute the gradient descent of the logistic regression
-    :param X: pd.Series, the feature
-    :param Y: pd.Series, the target
-    :param learning_rate: float, the learning rate
-    :param epoch: int, the number of iterations
-    :return: dict, a dictionary containing the thetas
+    Compute the gradient descent of the logistic regression.
+    Parameters
+    ----------
+    X : The feature.
+    Y : The target.
+    learning_rate : The learning rate.
+    epoch : The number of epoch.
+
+    Returns
+    -------
+    A dictionary containing the gradient descent thetas.
     """
     m = len(Y)
     thetas = {"theta0": 0, "theta1": 1}

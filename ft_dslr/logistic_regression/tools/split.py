@@ -1,13 +1,20 @@
+"""Split a dataframe to have a train and a test part."""
+
 import pandas as pd
 
 
 def split_data(data: pd.DataFrame, test_size: float, random_state: int) -> tuple:
     """
-    Split the data into training and testing sets
-    :param data: the data to split
-    :param test_size: the size of the testing set
-    :param random_state: the seed for the random number generator
-    :return: the training and testing sets X_train, X_test, y_train, y_test
+    Split a dataframe to have a train and a test part.
+    Parameters
+    ----------
+    data : The source dataframe.
+    test_size : The size of the test split. (as a ratio)
+    random_state : The seed of the ramdom number generator.
+
+    Returns
+    -------
+    A tuple of the train and test dataframes.
     """
 
     data_sample = data.sample(frac=1, random_state=random_state)

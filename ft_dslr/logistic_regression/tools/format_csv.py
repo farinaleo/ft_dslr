@@ -1,3 +1,5 @@
+"""Tools to format and apply configurations on csv."""
+
 import configparser
 import os
 
@@ -8,13 +10,17 @@ def format_csv(
     path: str, config: str = None, norm_data: bool = False, verbose: bool = False
 ) -> pd.DataFrame:
     """
-    Format a CSV file to be used for a Logistic Regression. If a config file is specified, it will be used
-    to remove Columns and replace values.
-    :param path: The path of the file.
-    :param config: The path of the config file.
-    :param norm_data: Option to normalize the data. (apply the Z-score and replace missing values with Mean Imputation)
-    :param verbose: Print addition information.
-    :return: The formatted df.DataFrame.
+    Format and apply configurations on csv files.
+    Parameters
+    ----------
+    path : The file path.
+    config : The configuration path.
+    norm_data : Option to normalize data. (Used the Z-score and replace missing values with the Mean Imputation).
+    verbose : Print additional information.
+
+    Returns
+    -------
+    The formated dataframe.
     """
     try:
         df = pd.read_csv(path)
@@ -29,23 +35,18 @@ def format_csv(
         raise ValueError(f"[ERROR] Some thing went wrong with csv and/or config file.\n{e}")
 
 
-def open_csv(path: str) -> pd.DataFrame:
-    """
-    Open a CSV file to be used convert as a pandas DataFrame.
-    :param path: The path of the file.
-    :return: The csv as a pandas DataFrame.
-    """
-    df = pd.read_csv(path)
-    return df
-
-
 def apply_config(config: str, df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
     """
-    Apply a config file to the given data frame.
-    :param config: the path of the config file.
-    :param df: the data frame.
-    :param verbose: Print addition information.
-    :return: The formatted df.
+    Apply configurations to dataframe.
+    Parameters
+    ----------
+    config : The configuration path.
+    df : The dataframe to be formatted.
+    verbose : Print additional information.
+
+    Returns
+    -------
+    The formatted dataframe.
     """
     conf = configparser.ConfigParser()
     conf.optionxform = lambda option: option
@@ -59,11 +60,16 @@ def config_drop_columns(
     df: pd, config: configparser.ConfigParser, verbose: bool = False
 ) -> pd.DataFrame:
     """
-    Drop columns specified in the config file.
-    :param df: the data frame.
-    :param config: the config file as a ConfigParser object.
-    :param verbose: Print addition information.
-    :return: the formatted data frame.
+    Drop specified columns from dataframe.
+    Parameters
+    ----------
+    df : The dataframe to be formatted.
+    config : The configuration as a configparser.ConfigParser object.
+    verbose : Print additional information.
+
+    Returns
+    -------
+    The formatted dataframe.
     """
     for col in config["COLUMNS"]:
         if not bool(config["COLUMNS"].getboolean(col)) and col in df.columns:
@@ -77,11 +83,16 @@ def config_replace_values(
     df: pd, config: configparser.ConfigParser, verbose: bool = False
 ) -> pd.DataFrame:
     """
-    Replace values specified in the config file.
-    :param df: the data frame.
-    :param config: the config file as a ConfigParser object.
-    :param verbose: Print additional information.
-    :return: the formatted data frame.
+    Replace specified values, in the configuration, in dataframe.
+    Parameters
+    ----------
+    df : The dataframe to be formatted.
+    config : The configuration as a configparser.ConfigParser object.
+    verbose : Print additional information.
+
+    Returns
+    -------
+    The formatted dataframe.
     """
     for section in config.sections():
         if section.startswith("REPLACE:"):
@@ -96,9 +107,14 @@ def config_replace_values(
 
 def add_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Add missing with Mean Imputation.
-    :param df: the data frame.
-    :return: the formatted data frame.
+    Add missing values to dataframe with the Mean Imputation.
+    Parameters
+    ----------
+    df : The dataframe to be formatted.
+
+    Returns
+    -------
+    the formatted dataframe.
     """
     for col in df.select_dtypes(include=["number"]).columns.tolist():
         _mean = df[col].mean()
@@ -108,9 +124,14 @@ def add_missing_values(df: pd.DataFrame) -> pd.DataFrame:
 
 def normalise_csv(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Normalise the data frame with the Z-score.
-    :param df: the data frame.
-    :return: the formatted data frame.
+    Normalise the dataframe with the Z-score.
+    Parameters
+    ----------
+    df : The dataframe to be formatted.
+
+    Returns
+    -------
+    The formatted dataframe.
     """
     for col in df.select_dtypes(include=["number"]).columns.tolist():
         _mean = df[col].mean()
@@ -121,10 +142,15 @@ def normalise_csv(df: pd.DataFrame) -> pd.DataFrame:
 
 def list_to_csv(y_list: list, dest_path: str):
     """
-    Convert a list to a CSV file and save it.
-    :param y_list: the list to convert.
-    :param dest_path: the path of the directory to save the CSV file.
-    :return:
+    Convert a list to a csv file and save it.
+    Parameters
+    ----------
+    y_list : The list to convert.
+    dest_path : The detination path.
+
+    Returns
+    -------
+    None
     """
     df = pd.DataFrame(y_list, columns=["Hogwarts House"])
     df.reset_index(inplace=True)

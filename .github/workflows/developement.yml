@@ -1,0 +1,128 @@
+# .github/workflows/development.yml
+name: Development pipeline
+
+on:
+  push:
+
+env:
+  PYTHON_M: python -m
+
+jobs:
+  create-virtualenv:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - uses: syphar/restore-pip-download-cache@v1
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - run: pip install -r requirements.txt
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+  school_lint:
+    runs-on: ubuntu-22.04
+    needs: create-virtualenv
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - name: Install requirements-dev
+        run: pip install -r requirements-dev.txt
+
+      - name: Run Flake8
+        run: |
+          $PYTHON_M flake8 ft_dslr --disable-noqa --config setup.cfg
+
+  projet_lint:
+    runs-on: ubuntu-20.04
+    needs: school_lint
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - name: Install requirements-dev
+        run: pip install -r requirements-dev.txt
+
+      - name: Run make lint
+        run: make lint
+
+
+  data:
+      runs-on: ubuntu-22.04
+      needs: projet_lint
+
+      steps:
+        - uses: actions/checkout@v1
+        - uses: actions/setup-python@v2
+        - uses: syphar/restore-virtualenv@v1
+          id: cache-virtualenv
+
+        - name: Import_data
+          run: |
+            make data
+
+        - name: Zip_data
+          run: |
+            mkdir -p data_artifact
+            zip -r data_artifact/data.zip data
+
+        - name: push zip and shasum
+          if: ${{ success() }}
+          run: |
+            shasum data_artifact/data.zip > data_artifact/sha.txt
+
+          continue-on-error: true
+
+        - name: Upload data directory
+          uses: actions/upload-artifact@v4
+          with:
+            name: data-artifact
+            path: data_artifact
+
+  train:
+    runs-on: ubuntu-22.04
+    needs: [data]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+
+      - name: Download data artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: data-artifact
+          path: data_artifact
+
+      - name: Unzip data artifact
+        run: |
+          unzip data_artifact/data.zip -d data
+
+      - name: Train_model
+        run: |
+          mkdir -p data/model
+          pip install -e .
+          python ft_dslr/logistic_regression/logreg_train.py  data/data/external/datasets/dataset_train.csv --config models/logistic.ini --save_dir data
+
+      - name: Zip_data
+        run: |
+          mkdir -p train_artifact
+          zip -r train_artifact/train.zip data
+
+      - name: Upload data directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: train-artifact
+          path: train_artifact

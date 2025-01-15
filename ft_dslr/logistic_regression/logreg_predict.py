@@ -175,7 +175,7 @@ def logreg_predict(data_path: str, weight_path: str, config_path: str, dest_path
 
 
 def options_parser():
-    """ "
+    """
     Used to handle command line options.
     Returns
     -------

@@ -54,7 +54,7 @@ def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False
 
 
 def options_parser():
-    """ "
+    """
     Used to handle command line options.
     Returns
     -------

@@ -78,7 +78,7 @@ def plot_single_histogram(df: pd.DataFrame, subject: str, ax: plt.Axes) -> None:
 
 
 def options_parser():
-    """ "
+    """
     Used to handle command line options.
     Returns
     -------

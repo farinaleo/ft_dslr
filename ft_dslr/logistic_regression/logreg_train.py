@@ -28,7 +28,7 @@ def save_model(model: dict, file_name: str) -> None:
 
 
 def options_parser():
-    """ "
+    """
     Used to handle command line options.
     Returns
     -------

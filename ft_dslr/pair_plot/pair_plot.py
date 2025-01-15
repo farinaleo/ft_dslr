@@ -91,7 +91,7 @@ def plot_single_graph(
 
 
 def options_parser():
-    """ "
+    """
     Used to handle command line options.
     Returns
     -------

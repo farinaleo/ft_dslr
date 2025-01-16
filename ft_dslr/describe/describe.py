@@ -8,13 +8,16 @@ import pandas as pd
 from ft_dslr.tools import open_csv
 
 
-def describe(df: pd.DataFrame, drop: bool = False, verbose: bool = False) -> pd.DataFrame:
+def describe(
+    df: pd.DataFrame, drop: bool = False, bonus: bool = False, verbose: bool = False
+) -> pd.DataFrame:
     """
     Describe the given dataframe.
     Parameters
     ----------
     df : The dataframe to describe.
     drop :  Drop empty columns.
+    bonus : Add more info that are not required in the mandatory.
     verbose : Print additional information.
 
     Returns
@@ -31,29 +34,47 @@ def describe(df: pd.DataFrame, drop: bool = False, verbose: bool = False) -> pd.
     df_tmp = df_tmp[columns_num]
     df_tmp = df_tmp.astype(float)
 
-    description["Info"] = ["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]
+    if not bonus:
+        description["Info"] = ["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]
+    else:
+        description["Info"] = [
+            "Count",
+            "Mean",
+            "Std",
+            "Min",
+            "25%",
+            "50%",
+            "75%",
+            "Max",
+            "Missing values",
+            "range",
+        ]
 
     for col in df_tmp.columns:
         if verbose:
             print(f"Column used: {col}")
-        description[col] = describe_column(df_tmp, col)
+        description[col] = describe_column(df_tmp, col, bonus=bonus)
 
     return description
 
 
-def describe_column(df: pd.DataFrame, column: str) -> list:
+def describe_column(df: pd.DataFrame, column: str, bonus: bool = False) -> list:
     """
     Describe a specific column from the dataframe.
     Parameters
     ----------
     df : The source dataframe.
     column : The column to describe.
+    bonus : Add more info that are not required in the mandatory.
 
     Returns
     -------
     A list of elements used to describe the column.
     """
     df_tmp = pd.DataFrame(df[column].copy())
+
+    missing = get_total_missing_values(df_tmp, column)
+
     df_tmp.dropna(inplace=True)
     df_tmp.sort_values(by=column, ascending=True, inplace=True)
     df_tmp.reset_index(drop=True, inplace=True)
@@ -65,8 +86,11 @@ def describe_column(df: pd.DataFrame, column: str) -> list:
     q25 = compute_quantile(df_tmp, column, 0.25)
     q50 = compute_quantile(df_tmp, column, 0.5)
     q75 = compute_quantile(df_tmp, column, 0.75)
+    range = max_v - min_v
 
-    return [count, mean, std, min_v, q25, q50, q75, max_v]
+    if not bonus:
+        return [count, mean, std, min_v, q25, q50, q75, max_v]
+    return [count, mean, std, min_v, q25, q50, q75, max_v, missing, range]
 
 
 def compute_mean(df: pd.DataFrame, column: str) -> float:
@@ -157,6 +181,27 @@ def compute_quantile(df: pd.DataFrame, column: str, q: float) -> tuple:
     return q_v
 
 
+def get_total_missing_values(df: pd.DataFrame, column: str) -> int:
+    """
+    Get the total missing values of the given column.
+    Parameters
+    ----------
+    df : The source dataframe.
+    column : The column to describe.
+
+    Returns
+    -------
+    The total number of missing values of the column.
+    """
+    missing = 0
+
+    for _, value in df[column].items():
+        if not isinstance(value, float) or math.isnan(value):
+            missing += 1
+
+    return missing
+
+
 def options_parser():
     """
     Used to handle command line options.
@@ -177,6 +222,12 @@ def options_parser():
         action="store_true",
         help="Print additional information about the process.",
     )
+    parser.add_argument(
+        "-b",
+        "--bonus",
+        action="store_true",
+        help="Add new information that are not required in the mandatory.",
+    )
 
     return parser
 
@@ -187,7 +238,7 @@ if __name__ == "__main__":
         df = open_csv(
             args.dataset[0],
         )
-        description = describe(df, drop=args.drop, verbose=args.verbose)
+        description = describe(df, drop=args.drop, bonus=args.bonus, verbose=args.verbose)
         print(description)
         print("\n[INFO] To see the entire description, use the jupyter notebook.")
     except Exception as e:

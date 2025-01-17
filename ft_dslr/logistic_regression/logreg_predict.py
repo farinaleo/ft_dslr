@@ -2,7 +2,6 @@
 
 import argparse
 import configparser
-import json
 
 import numpy as np
 import pandas as pd
@@ -14,19 +13,18 @@ from ft_dslr.logistic_regression.tools import (
 )
 
 
-def load_weights(weight_path: str):
+def load_model(model_path: str):
     """
-    Load weights from a file.
+    Load model from a file.
     Parameters
     ----------
-    weight_path : The file path.
+    model_path : The file path.
 
     Returns
     -------
-    The loaded weights.
+    The loaded model.
     """
-    with open(weight_path) as json_data:
-        return json.load(json_data)
+    return pd.read_csv(model_path, index_col=[0, 1])
 
 
 def load_config(config_path: str):
@@ -64,13 +62,13 @@ def prepare_data(df_data: pd.DataFrame, config: configparser.ConfigParser):
     return df_data, X
 
 
-def predict(df_data: pd.DataFrame, weights: dict) -> list:
+def predict(df_data: pd.DataFrame, model: pd.DataFrame) -> list:
     """
     Apply the computed model to predict each house of the dataframe.
     Parameters
     ----------
     df_data : The source dataframe to predict.
-    weights : The weights to apply to each row.
+    model : A dataframe containing the model.
 
     Returns
     -------
@@ -80,22 +78,21 @@ def predict(df_data: pd.DataFrame, weights: dict) -> list:
 
     for index, row in df_data.iterrows():
         _total = {0: 0, 1: 0, 2: 0, 3: 0}
-        for key, value in row.items():
-            if key in weights:
-                for house, thetas in weights[key].items():
-                    if not pd.isnull(value) and isinstance(value, float):
-                        _total[int(house)] += float(
+        for col, value in row.items():
+            for house in list(model.index.get_level_values(0).unique()):
+                if not pd.isnull(value) and isinstance(value, float):
+                    _total[int(house)] += float(
+                        1
+                        / (
                             1
-                            / (
-                                1
-                                + np.exp(
-                                    -(
-                                        float(thetas["theta0"])
-                                        + float(thetas["theta1"]) * float(value)
-                                    )
+                            + np.exp(
+                                -(
+                                    float(model[col].loc[house, 0])
+                                    + float(model[col].loc[house, 1]) * float(value)
                                 )
                             )
                         )
+                    )
         predict_list.append((index, _total))
     return predict_list
 
@@ -146,13 +143,13 @@ def category_to_label(y: list, conf: configparser.ConfigParser):
     return y_labels
 
 
-def logreg_predict(data_path: str, weight_path: str, config_path: str, dest_path: str):
+def logreg_predict(data_path: str, model_path: str, config_path: str, dest_path: str):
     """
     Predict the house of each student.
     Parameters
     ----------
     data_path : The path of the csv source.
-    weight_path : The weight path.
+    model_path : The model path.
     config_path : The configuration path.
     dest_path : The destination path.
 
@@ -161,11 +158,11 @@ def logreg_predict(data_path: str, weight_path: str, config_path: str, dest_path
     None
     """
     df_data = format_csv(data_path, config=config_path, norm_data=False)
-    weights = load_weights(weight_path)
+    model = load_model(model_path)
     config = load_config(config_path)
 
     df_data, X = prepare_data(df_data, config)
-    predict_list = predict(df_data, weights)
+    predict_list = predict(df_data, model)
 
     y_pred = predict_house(predict_list)
 

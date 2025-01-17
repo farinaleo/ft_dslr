@@ -1,30 +1,34 @@
 """Script used to train the logistic regression model."""
 
 import argparse
-import json
 import os
 
+import pandas as pd
 from logreg_predict import predict, predict_house
 from sklearn.metrics import accuracy_score
 
 from ft_dslr.logistic_regression import train_model
+from ft_dslr.logistic_regression.batch_selectors import mandatory_batch
 from ft_dslr.logistic_regression.tools import format_csv, split_data
 
+BATCH_SELECTOR = {
+    "mandatory": mandatory_batch,
+}
 
-def save_model(model: dict, file_name: str) -> None:
+
+def save_model(model: pd.DataFrame, file_name: str) -> None:
     """
     Save the model as a json file.
     Parameters
     ----------
-    model : Dictionary with the model to be saved.
+    model : The dataframe with the model to save.
     file_name : The destination file.
 
     Returns
     -------
     None
     """
-    with open(file_name, "w") as file:
-        json.dump(model, file, indent=4)
+    model.to_csv(file_name)
 
 
 def options_parser():
@@ -53,7 +57,7 @@ def options_parser():
     parser.add_argument(
         "-c", "--config", type=str, default="models/logistic.ini", help="The config file."
     )
-    parser.add_argument("-m", "--model", type=str, default="model.json", help="The model file.")
+    parser.add_argument("-m", "--model", type=str, default="model.csv", help="The model file.")
     parser.add_argument(
         "-l",
         "--learning_rate",
@@ -86,6 +90,13 @@ def options_parser():
         default="",
         help="Directory to save the trained model.",
     )
+    parser.add_argument(
+        "--batch",
+        type=str,
+        default="mandatory",
+        choices=BATCH_SELECTOR.keys(),
+        help="Batch selector model.",
+    )
 
     return parser
 
@@ -97,7 +108,7 @@ if __name__ == "__main__":
         X_train, X_test, y_train, y_test = split_data(df, args.validation_ratio, args.seed)
 
         if args.accuracy:
-            model = json.load(open(args.model))
+            model = pd.read_csv(args.model, index_col=[0, 1])
         else:
             model = train_model(X_train, y_train, args.learning_rate, args.epoch)
 
@@ -110,7 +121,8 @@ if __name__ == "__main__":
         )
 
         if not args.accuracy:
-            save_model(model, os.path.join(args.save_dir, "model.json"))
+            save_model(model, os.path.join(args.save_dir, args.model))
     except Exception as e:
         print("[ERROR] The training process failed")
         print("[ERROR] error: {}".format(e))
+        raise ValueError("Error") from e

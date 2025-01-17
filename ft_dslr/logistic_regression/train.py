@@ -4,12 +4,12 @@ import pandas as pd
 from tqdm import tqdm
 
 from ft_dslr.logistic_regression import gradient_descent
-from ft_dslr.logistic_regression.tools import denorm_thetas, normalise_df
+from ft_dslr.logistic_regression.tools import denormalize_thetas, normalise_df
 
 
 def train_model(
     X: pd.DataFrame, y: pd.Series, learning_rate: float = 0.1, epoch: int = 1000
-) -> dict:
+) -> pd.DataFrame:
     """
     Train the logistic regression model on the X and Y data.
     Parameters
@@ -21,34 +21,30 @@ def train_model(
 
     Returns
     -------
-    A dictionary containing the trained model.
+    A dataframe containing the model.
     """
-    model = {}
+    models = {}
 
     with tqdm(total=len(X.columns) * 4, desc="Training ", ncols=100) as pbar:
-        for col in X.columns:
-            _X = normalise_df(X[col].astype(float))
-            _model = learn_multiple_y(
-                _X,
-                y,
-                epoch=epoch,
-                learning_rate=learning_rate,
-                x_mean=X[col].astype(float).mean(),
-                x_std=X[col].astype(float).std(),
-                pbar=pbar,
-            )
-            model[col] = _model
+
+        models = learn_multiple_y(
+            X,
+            y,
+            epoch=epoch,
+            learning_rate=learning_rate,
+            pbar=pbar,
+        )
+
+    model_df = pd.concat(models.values(), keys=models.keys())
     print("Done")
-    return model
+    return model_df
 
 
 def learn_multiple_y(
-    X: pd.Series,
+    X: pd.DataFrame,
     y: pd.Series,
     epoch: int,
     learning_rate: float,
-    x_mean: float,
-    x_std: float,
     pbar=None,
 ) -> dict:
     """
@@ -72,13 +68,14 @@ def learn_multiple_y(
     params = y.unique()
 
     for param in params:
-        _X = X.copy(deep=True)
+        _X = X.apply(lambda x: normalise_df(x.astype(float)), axis=0).copy(deep=True)
         _y = y.replace(params, [1 if e == param else 0 for e in params])
         _model = gradient_descent(_X, _y, epoch=epoch, learning_rate=learning_rate)
-        model[str(param)] = denorm_thetas(
-            _model, x_mean, x_std, _y.astype(float).mean(), _y.astype(float).std()
-        )
+
+        print(_model)
+        model[str(param)] = denormalize_thetas(_model, X, y)
+        print(model[str(param)])
         if pbar is not None:
-            pbar.update(1)
+            pbar.update(len(X.columns))
 
     return model

@@ -1,8 +1,11 @@
 """The implementation of the gradient descent."""
 
+from typing import Callable
+
 import numpy as np
 import pandas as pd
 
+from ft_dslr.logistic_regression.batch_selectors import mandatory_batch
 from ft_dslr.logistic_regression.tools import sigmoid
 
 
@@ -11,6 +14,7 @@ def gradient_descent(
     Y: pd.Series,
     learning_rate: float,
     epoch: int,
+    batch_selector: Callable[[pd.DataFrame, pd.Series], tuple] = mandatory_batch,
 ) -> pd.DataFrame:
     """
     Compute the gradient descent of the logistic regression.
@@ -20,22 +24,22 @@ def gradient_descent(
     Y : The target
     learning_rate : The learning rate.
     epoch : The number of epoch.
+    batch_selector : A function that select a batch.
 
     Returns
     -------
     A pandas DataFrame containing the gradient descent thetas.
     """
 
-    m = len(Y)
-
     thetas = pd.DataFrame(index=[0, 1], columns=X.columns)
-    thetas.iloc[0] = 1
-    thetas.iloc[1] = 2
+    thetas.iloc[0] = 0
+    thetas.iloc[1] = 1
 
     for _ in range(epoch):
-        thetas = X.apply(
+        _X, _Y = batch_selector(X, Y)
+        thetas = _X.apply(
             lambda x: get_gradients(
-                x, Y, thetas[x.name].loc[0], thetas[x.name].loc[1], m, learning_rate
+                x, _Y, thetas[x.name].loc[0], thetas[x.name].loc[1], len(_Y), learning_rate
             ),
             axis=0,
         )

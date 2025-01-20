@@ -110,7 +110,9 @@ if __name__ == "__main__":
         if args.accuracy:
             model = pd.read_csv(args.model, index_col=[0, 1])
         else:
-            model = train_model(X_train, y_train, args.learning_rate, args.epoch)
+            model = train_model(
+                X_train, y_train, args.learning_rate, args.epoch, batch_selector=args.batch
+            )
 
         y_pred = predict(X_test, model)
         y_pred = predict_house(y_pred)

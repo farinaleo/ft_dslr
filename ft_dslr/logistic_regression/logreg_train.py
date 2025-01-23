@@ -2,17 +2,24 @@
 
 import argparse
 import os
+import random
 
 import pandas as pd
 from logreg_predict import predict, predict_house
 from sklearn.metrics import accuracy_score
 
 from ft_dslr.logistic_regression import train_model
-from ft_dslr.logistic_regression.batch_selectors import mandatory_batch
+from ft_dslr.logistic_regression.batch_selectors import (
+    mandatory_batch,
+    mini_batch,
+    stochastic_batch,
+)
 from ft_dslr.logistic_regression.tools import format_csv, split_data
 
 BATCH_SELECTOR = {
     "mandatory": mandatory_batch,
+    "stochastic": stochastic_batch,
+    "mini_batch": mini_batch,
 }
 
 
@@ -104,6 +111,8 @@ def options_parser():
 if __name__ == "__main__":
     try:
         args = options_parser().parse_args()
+        random.seed(args.seed)
+
         df = format_csv(args.Train_file[0], config=args.config, verbose=args.verbose)
         X_train, X_test, y_train, y_test = split_data(df, args.validation_ratio, args.seed)
 
@@ -111,7 +120,11 @@ if __name__ == "__main__":
             model = pd.read_csv(args.model, index_col=[0, 1])
         else:
             model = train_model(
-                X_train, y_train, args.learning_rate, args.epoch, batch_selector=args.batch
+                X_train,
+                y_train,
+                args.learning_rate,
+                args.epoch,
+                batch_selector=BATCH_SELECTOR[args.batch],
             )
 
         y_pred = predict(X_test, model)

@@ -33,9 +33,9 @@ def train_model(
     """
     models = {}
 
-    with tqdm(total=len(X.columns) * 4, desc="Training ", ncols=100) as pbar:
+    with tqdm(total=epoch * 4, desc="Training ", ncols=100) as pbar:
 
-        models = learn_multiple_y(
+        models = one_vs_all_logistic_regression(
             X,
             y,
             epoch=epoch,
@@ -49,7 +49,7 @@ def train_model(
     return model_df
 
 
-def learn_multiple_y(
+def one_vs_all_logistic_regression(
     X: pd.DataFrame,
     y: pd.Series,
     epoch: int,
@@ -81,14 +81,16 @@ def learn_multiple_y(
     for param in params:
         _X = X.apply(lambda x: normalise_df(x.astype(float)), axis=0).copy(deep=True)
         _y = y.replace(params, [1 if e == param else 0 for e in params])
+
         _model = gradient_descent(
-            _X, _y, epoch=epoch, learning_rate=learning_rate, batch_selector=batch_selector
+            _X,
+            _y,
+            epoch=epoch,
+            learning_rate=learning_rate,
+            batch_selector=batch_selector,
+            pbar=pbar,
         )
 
-        print(_model)
         model[str(param)] = denormalize_thetas(_model, X, y)
-        print(model[str(param)])
-        if pbar is not None:
-            pbar.update(len(X.columns))
 
     return model

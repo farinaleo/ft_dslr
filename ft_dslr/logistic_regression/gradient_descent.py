@@ -14,6 +14,7 @@ def gradient_descent(
     Y: pd.Series,
     learning_rate: float,
     epoch: int,
+    pbar=None,
     batch_selector: Callable[[pd.DataFrame, pd.Series], tuple] = mandatory_batch,
 ) -> pd.DataFrame:
     """
@@ -24,6 +25,7 @@ def gradient_descent(
     Y : The target
     learning_rate : The learning rate.
     epoch : The number of epoch.
+    pbar : A progress bar.
     batch_selector : A function that select a batch.
 
     Returns
@@ -37,12 +39,16 @@ def gradient_descent(
 
     for _ in range(epoch):
         _X, _Y = batch_selector(X, Y)
+
         thetas = _X.apply(
             lambda x: get_gradients(
                 x, _Y, thetas[x.name].loc[0], thetas[x.name].loc[1], len(_Y), learning_rate
             ),
             axis=0,
         )
+
+        if pbar is not None:
+            pbar.update(1)
 
     return thetas
 

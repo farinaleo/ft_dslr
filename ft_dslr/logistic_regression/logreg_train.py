@@ -14,28 +14,13 @@ from ft_dslr.logistic_regression.batch_selectors import (
     mini_batch,
     stochastic_batch,
 )
-from ft_dslr.logistic_regression.tools import format_csv, split_data
+from ft_dslr.logistic_regression.tools import format_csv, save_model, split_data
 
 BATCH_SELECTOR = {
     "mandatory": mandatory_batch,
     "stochastic": stochastic_batch,
     "mini_batch": mini_batch,
 }
-
-
-def save_model(model: pd.DataFrame, file_name: str) -> None:
-    """
-    Save the model as a json file.
-    Parameters
-    ----------
-    model : The dataframe with the model to save.
-    file_name : The destination file.
-
-    Returns
-    -------
-    None
-    """
-    model.to_csv(file_name)
 
 
 def options_parser():

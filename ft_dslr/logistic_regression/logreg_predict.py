@@ -3,63 +3,16 @@
 import argparse
 import configparser
 
-import numpy as np
 import pandas as pd
 
 from ft_dslr.logistic_regression.tools import (
-    config_drop_columns,
     format_csv,
     list_to_csv,
+    load_config,
+    load_model,
+    prepare_data,
+    simple_sigmoid,
 )
-
-
-def load_model(model_path: str):
-    """
-    Load model from a file.
-    Parameters
-    ----------
-    model_path : The file path.
-
-    Returns
-    -------
-    The loaded model.
-    """
-    return pd.read_csv(model_path, index_col=[0, 1])
-
-
-def load_config(config_path: str):
-    """
-    Load the configuration from a file.
-    Parameters
-    ----------
-    config_path : The file path.
-
-    Returns
-    -------
-    The loaded configuration.
-    """
-    conf = configparser.ConfigParser()
-    conf.optionxform = lambda option: option
-    conf.read(config_path)
-    return conf
-
-
-def prepare_data(df_data: pd.DataFrame, config: configparser.ConfigParser):
-    """
-    Prepare the data for the prediction.
-    Parameters
-    ----------
-    df_data : The date to prepare.
-    config : The configuration to apply.
-
-    Returns
-    -------
-    The prepared data.
-    """
-    df_data = config_drop_columns(df_data, config, verbose=False)
-    X = df_data["Hogwarts House"].copy(deep=True)
-    df_data.drop("Hogwarts House", axis=1, inplace=True)
-    return df_data, X
 
 
 def predict(df_data: pd.DataFrame, model: pd.DataFrame) -> list:
@@ -81,17 +34,8 @@ def predict(df_data: pd.DataFrame, model: pd.DataFrame) -> list:
         for col, value in row.items():
             for house in list(model.index.get_level_values(0).unique()):
                 if not pd.isnull(value) and isinstance(value, float):
-                    _total[int(house)] += float(
-                        1
-                        / (
-                            1
-                            + np.exp(
-                                -(
-                                    float(model[col].loc[house, 0])
-                                    + float(model[col].loc[house, 1]) * float(value)
-                                )
-                            )
-                        )
+                    _total[int(house)] += simple_sigmoid(
+                        value, model[col].loc[house, 1], model[col].loc[house, 0]
                     )
         predict_list.append((index, _total))
     return predict_list

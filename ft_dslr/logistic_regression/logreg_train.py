@@ -98,7 +98,9 @@ if __name__ == "__main__":
         args = options_parser().parse_args()
         random.seed(args.seed)
 
-        df = format_csv(args.Train_file[0], config=args.config, verbose=args.verbose)
+        df = format_csv(
+            args.Train_file[0], config=args.config, verbose=args.verbose, add_missing=True
+        )
         X_train, X_test, y_train, y_test = split_data(df, args.validation_ratio, args.seed)
 
         if args.accuracy:

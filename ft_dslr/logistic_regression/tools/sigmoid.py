@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-def sigmoid(z: pd.Series) -> pd.Series:
+def sigmoid(z: pd.Series | np.ndarray) -> pd.Series | np.ndarray:
     """
     Compute sigmoid function.
     Parameters
@@ -15,7 +15,9 @@ def sigmoid(z: pd.Series) -> pd.Series:
     -------
     A series of results.
     """
-    return z.apply(lambda x: 1 / (1 + np.exp(-x)))
+
+    z = np.asarray(z)
+    return 1 / (1 + np.exp(-z))
 
 
 def simple_sigmoid(x: float, a: float, b: float) -> float:

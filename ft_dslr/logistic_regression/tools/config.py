@@ -1,8 +1,6 @@
 """Simple function ot manage configuration."""
 
 import configparser
-import json
-import os
 
 
 def load_config(config_path: str):

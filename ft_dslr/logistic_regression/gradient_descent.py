@@ -72,10 +72,14 @@ def get_gradients(
     The thetas optimized.
     """
 
-    z = X.apply(lambda x: theta0 + theta1 * x)
-    h = sigmoid(z)
+    _X = X.to_numpy()
+    _Y = Y.to_numpy()
 
-    theta0 -= learning_rate * (1 / m) * np.sum(h - Y)
-    theta1 -= learning_rate * (1 / m) * np.sum(np.transpose(h - Y) * X)
+    z = theta0 + theta1 * _X
+    h = sigmoid(z)
+    error = h - _Y
+
+    theta0 -= learning_rate * np.mean(error)
+    theta1 -= learning_rate * np.dot(error, X) / m
 
     return theta0, theta1

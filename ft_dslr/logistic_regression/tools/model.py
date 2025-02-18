@@ -1,7 +1,5 @@
 """Simple tools to manage the model. (open / load / save / ...)"""
 
-import os
-
 import pandas as pd
 
 

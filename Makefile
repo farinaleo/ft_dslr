@@ -32,6 +32,7 @@ $(VENV_DIR): ## Create the python virtual env
 .PHONY: install
 install: requirements.txt  $(VENV_DIR) ## Install the requirements.txt
 	${PIP} install -r requirements.txt
+	${PIP} install -e .
 
 
 .PHONY: clean

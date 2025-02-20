@@ -20,7 +20,7 @@ def random_step_batch(
 
     indices = np.arange(0, len(X), np.random.randint(1, 11))
     np.random.shuffle(indices)
-    selected_indices = indices[:int(len(X) * 0.2)]
+    selected_indices = indices[: int(len(X) * 0.2)]
 
     _X = X.iloc[selected_indices]
     _Y = Y.iloc[selected_indices]

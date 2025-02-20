@@ -15,6 +15,7 @@ from ft_dslr.logistic_regression.batch_selectors import (
     random_step_batch,
     stochastic_batch,
 )
+from ft_dslr.logistic_regression.new_gd import train
 from ft_dslr.logistic_regression.tools import format_csv, save_model, split_data
 
 BATCH_SELECTOR = {
@@ -108,11 +109,21 @@ if __name__ == "__main__":
         if args.accuracy:
             model = pd.read_csv(args.model, index_col=[0, 1])
         else:
-            model = train_model(
+            # model = train_model(
+            #     X_train,
+            #     y_train,
+            #     args.learning_rate,
+            #     args.epoch,
+            #     batch_selector=BATCH_SELECTOR[args.batch],
+            # )
+
+            model = train(
                 X_train,
                 y_train,
                 args.learning_rate,
                 args.epoch,
+                X_test=X_test,
+                Y_test=y_test,
                 batch_selector=BATCH_SELECTOR[args.batch],
             )
 

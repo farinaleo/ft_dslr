@@ -25,6 +25,5 @@ def stochastic_batch(
 
     _X = X.iloc[[r_id]]
     _Y = Y.iloc[[r_id]]
-    _X = _X if isinstance(_X, np.ndarray) else _X.to_numpy()
-    _Y = _Y if isinstance(_Y, np.ndarray) else _Y.to_numpy()
+
     return _X, _Y

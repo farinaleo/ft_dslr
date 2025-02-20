@@ -18,8 +18,5 @@ def mandatory_batch(
     -------
     The selected feature and target. (X, Y)
     """
-    # _X = X if isinstance(X, np.ndarray) else X.to_numpy()
-    # _Y = Y if isinstance(Y, np.ndarray) else Y.to_numpy()
-    # return _X, _Y
 
     return X, Y

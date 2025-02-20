@@ -12,6 +12,7 @@ from ft_dslr.logistic_regression import train_model
 from ft_dslr.logistic_regression.batch_selectors import (
     mandatory_batch,
     mini_batch,
+    random_step_batch,
     stochastic_batch,
 )
 from ft_dslr.logistic_regression.tools import format_csv, save_model, split_data
@@ -19,7 +20,8 @@ from ft_dslr.logistic_regression.tools import format_csv, save_model, split_data
 BATCH_SELECTOR = {
     "mandatory": mandatory_batch,
     "stochastic": stochastic_batch,
-    "mini_batch": mini_batch,
+    "mini": mini_batch,
+    "random_step": random_step_batch,
 }
 
 

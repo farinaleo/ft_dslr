@@ -8,11 +8,9 @@ import pandas as pd
 from logreg_predict import predict, predict_house
 from sklearn.metrics import accuracy_score
 
-from ft_dslr.logistic_regression import train_model
 from ft_dslr.logistic_regression.batch_selectors import (
     mandatory_batch,
     mini_batch,
-    random_step_batch,
     stochastic_batch,
 )
 from ft_dslr.logistic_regression.new_gd import train
@@ -22,7 +20,6 @@ BATCH_SELECTOR = {
     "mandatory": mandatory_batch,
     "stochastic": stochastic_batch,
     "mini": mini_batch,
-    "random_step": random_step_batch,
 }
 
 
@@ -92,6 +89,11 @@ def options_parser():
         choices=BATCH_SELECTOR.keys(),
         help="Batch selector model.",
     )
+    parser.add_argument(
+        "--plot",
+        action="store_true",
+        help="Plot the accuracy curve.",
+    )
 
     return parser
 
@@ -122,8 +124,8 @@ if __name__ == "__main__":
                 y_train,
                 args.learning_rate,
                 args.epoch,
-                X_test=X_test,
-                Y_test=y_test,
+                X_test=X_test if args.plot else None,
+                Y_test=y_test if args.plot else None,
                 batch_selector=BATCH_SELECTOR[args.batch],
             )
 

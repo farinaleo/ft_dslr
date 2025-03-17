@@ -38,8 +38,8 @@ def denormalize_thetas(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd
     """
     return model.apply(
         lambda x: [
-            denormalize_t0(x.loc[0], x.loc[1], X[x.name], y),
-            denormalize_t1(x.loc[1], X[x.name], y),
+            denormalize_t0(x.loc[:, 0], x.loc[:, 1], X[x.name], y),
+            denormalize_t1(x.loc[:, 1], X[x.name], y),
         ],
         axis=0,
     )

@@ -1,14 +1,12 @@
 """The stochastic batch return a unique row (X and Y) picked randomly."""
 
-import random
-
 import numpy as np
 import pandas as pd
 
 
 def stochastic_batch(
-    X: pd.Series | np.ndarray, Y: pd.Series | np.ndarray, **args
-) -> tuple[np.ndarray, np.ndarray]:
+    X: pd.DataFrame, Y: pd.DataFrame, **args
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Stochastic batch return a unique row (X and Y) picked randomly.
     Parameters
@@ -21,9 +19,9 @@ def stochastic_batch(
     The selected feature and target. (X, Y).
     """
 
-    r_id = random.randint(0, len(X) - 1)
+    r_id = np.random.choice(X.index.tolist(), 1)
 
-    _X = X.iloc[[r_id]]
-    _Y = Y.iloc[[r_id]]
+    _X = X.loc[[int(r_id[0])]]
+    _Y = Y.loc[:, [int(r_id[0])]]
 
     return _X, _Y

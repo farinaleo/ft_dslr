@@ -6,9 +6,7 @@ import pandas as pd
 MINI_BATCH_SIZE = 32
 
 
-def mini_batch(
-    X: pd.Series | np.ndarray, Y: pd.Series | np.ndarray, **args
-) -> tuple[np.ndarray, np.ndarray]:
+def mini_batch(X: pd.DataFrame, Y: pd.DataFrame, **args) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Mini batch return a small batch of N elements (X and Y) picked randomly.
     Parameters
@@ -21,9 +19,11 @@ def mini_batch(
     The selected feature and target. (X, Y).
     """
 
-    list_id = np.random.choice(len(Y), size=MINI_BATCH_SIZE, replace=False)
+    list_id = np.random.choice(X.index.tolist(), size=MINI_BATCH_SIZE, replace=False)
 
-    _X = X.iloc[list_id]
-    _Y = Y.iloc[list_id]
+    list_id = [int(id) for id in list_id.tolist()]
+
+    _X = X.loc[list_id]
+    _Y = Y.loc[:, list_id]
 
     return _X, _Y

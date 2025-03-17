@@ -23,11 +23,25 @@ def train(
     Y_test: pd.DataFrame = None,
     batch_selector: Callable[[pd.DataFrame, pd.Series], tuple] = mandatory_batch,
 ) -> pd.DataFrame:
+    """
+    Train the logistic regression model.
+    Parameters
+    ----------
+    X : The features.
+    y : The target.
+    learning_rate : The learning rate.
+    epoch : Number of epochs.
+    X_test : Test Features for the accuracy.
+    Y_test : Test target for the accuracy,
+    batch_selector : Function to select batches.
+
+    Returns
+    -------
+    The model as a pd.DataFrame.
+    """
 
     _X, _y, labels = prepare_data(X, y)
     thetas = build_thetas(X, labels)
-
-    print(_y)
 
     model = gradient_descent(
         _X,
@@ -43,6 +57,8 @@ def train(
 
     print(model)
 
+    model = denormalize_thetas(model, X, y)
+
     return model
     # gradient descent
     # for each epoch
@@ -57,15 +73,15 @@ def train(
 
 def prepare_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFrame, list]:
     """
-
+    Prepare data.
     Parameters
     ----------
-    X :
-    y :
+    X : The features.
+    y : The target.
 
     Returns
     -------
-
+    Prepared X and y and labels.
     """
     data = {}
     y = y.astype(int)
@@ -84,6 +100,17 @@ def prepare_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFr
 
 
 def build_thetas(X: pd.DataFrame, labels: list) -> pd.DataFrame:
+    """
+    Init thetas.
+    Parameters
+    ----------
+    X : The features.
+    labels : The labels.
+
+    Returns
+    -------
+    The initialized thetas.
+    """
     data = {}
 
     for value in labels:
@@ -106,15 +133,32 @@ def gradient_descent(
     X_test: pd.DataFrame = None,
     Y_test: pd.DataFrame = None,
 ) -> pd.DataFrame:
+    """
+    Compute thetas with the gradient descent.
+    Parameters
+    ----------
+    X : The features.
+    Y : The target.
+    thetas : Initial thetas.
+    labels : Labels.
+    learning_rate : Learning rate.
+    epoch : Number of epochs.
+    batch_selector : Function to select batches.
+    X_test : Test Features for the accuracy.
+    Y_test : Test target for the accuracy.
+
+    Returns
+    -------
+    The model as a pd.DataFrame.
+    """
 
     acc = []
 
     for _ in tqdm(range(epoch)):
-        # _X, _Y = batch_selector(X, Y)
-        _X, _Y = X, Y
+        _X, _Y = batch_selector(X, Y)
 
         for label in labels:
-            thetas.loc[label] = X.apply(
+            thetas.loc[label] = _X.apply(
                 lambda x: get_gradients(
                     x,
                     _Y[label],
@@ -126,9 +170,11 @@ def gradient_descent(
                 axis=0,
             ).values
 
-        acc.append(get_accurency(X_test, Y_test, thetas))
+        if X_test is not None or Y_test is not None:
+            acc.append(get_accurency(X_test, Y_test, thetas))
 
-    plt.plot(acc)
+    if X_test is not None or Y_test is not None:
+        plt.plot(acc)
     plt.show()
 
     return thetas

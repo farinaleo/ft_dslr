@@ -36,10 +36,35 @@ def denormalize_thetas(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd
     -------
     The denormalized model.
     """
+
+    y = y.astype(float)
+
+    return (
+        model.groupby(level=0)
+        .apply(lambda sub_model: _denorm(sub_model, X, y))
+        .reset_index(level=0, drop=True)
+    )
+
+
+def _denorm(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
+    """
+    Denormalize the thetas for a specific level.
+    Parameters
+    ----------
+    model : The trained model.
+    X : the explanatory variables.
+    y : the variables to predict.
+
+    Returns
+    -------
+    The denormalized model.
+    """
+    idx = model.index.get_level_values(0).unique()[0]
+
     return model.apply(
         lambda x: [
-            denormalize_t0(x.loc[:, 0], x.loc[:, 1], X[x.name], y),
-            denormalize_t1(x.loc[:, 1], X[x.name], y),
+            denormalize_t0(x.loc[idx, 0], x.loc[idx, 1], X[x.name], y),
+            denormalize_t1(x.loc[idx, 1], X[x.name], y),
         ],
         axis=0,
     )

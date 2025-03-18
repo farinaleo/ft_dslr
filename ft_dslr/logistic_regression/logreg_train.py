@@ -5,7 +5,6 @@ import os
 import random
 
 import pandas as pd
-from ft_dslr.logistic_regression.logreg_predict import predict, predict_house
 from sklearn.metrics import accuracy_score
 
 from ft_dslr.logistic_regression.batch_selectors import (
@@ -14,6 +13,7 @@ from ft_dslr.logistic_regression.batch_selectors import (
     stochastic_batch,
 )
 from ft_dslr.logistic_regression.gradient_descent import train
+from ft_dslr.logistic_regression.logreg_predict import predict, predict_house
 from ft_dslr.logistic_regression.tools import format_csv, save_model, split_data
 
 BATCH_SELECTOR = {

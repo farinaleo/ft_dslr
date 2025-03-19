@@ -7,7 +7,7 @@ import pandas as pd
 
 
 def format_csv(
-    path: str, config: str = None, norm_data: bool = False, verbose: bool = False
+    path: str, config: str = None, add_missing: bool = False, verbose: bool = False
 ) -> pd.DataFrame:
     """
     Format and apply configurations on csv files.
@@ -15,7 +15,7 @@ def format_csv(
     ----------
     path : The file path.
     config : The configuration path.
-    norm_data : Option to normalize data. (Used the Z-score and replace missing values with the Mean Imputation).
+    add_missing : Option to replace missing values. (Use the Mean Imputation).
     verbose : Print additional information.
 
     Returns
@@ -26,9 +26,8 @@ def format_csv(
         df = pd.read_csv(path)
         if config is not None:
             df = apply_config(config, df, verbose=verbose)
-        if norm_data:
+        if add_missing:
             df = add_missing_values(df)
-            df = normalise_csv(df)
         return df
 
     except Exception as e:
@@ -146,7 +145,7 @@ def list_to_csv(y_list: list, dest_path: str):
     Parameters
     ----------
     y_list : The list to convert.
-    dest_path : The detination path.
+    dest_path : The destination path.
 
     Returns
     -------

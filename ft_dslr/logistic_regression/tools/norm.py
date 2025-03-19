@@ -23,22 +23,81 @@ def normalise_df(df: pd.Series) -> pd.Series:
     return df_cp
 
 
-def denorm_thetas(thetas: dict, mean_x: float, std_x: float, mean_y: float, std_y: float) -> dict:
+def denormalize_thetas(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
     """
-    De-normalise thetas trained on a normalised dataframe.
+    Denormalize the thetas.
     Parameters
     ----------
-    thetas : Dictionary of thetas.
-    mean_x : The mean of the original data to explain.
-    std_x : The standard deviation of the original data to explain.
-    mean_y : The mean of the original data to predict.
-    std_y : The standard deviation of the original data to predict.
+    model : The trained model.
+    X : the explanatory variables.
+    y : the variables to predict.
 
     Returns
     -------
-    A dictionary with thetas de-normalised.
+    The denormalized model.
     """
-    t1 = thetas["theta1"] * (std_y / std_x)
-    t0 = mean_y + std_y * (thetas["theta0"] - (thetas["theta1"] * (mean_x / std_x)))
 
-    return {"theta0": t0, "theta1": t1}
+    y = y.astype(float)
+
+    return (
+        model.groupby(level=0)
+        .apply(lambda sub_model: _denorm(sub_model, X, y))
+        .reset_index(level=0, drop=True)
+    )
+
+
+def _denorm(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
+    """
+    Denormalize the thetas for a specific level.
+    Parameters
+    ----------
+    model : The trained model.
+    X : the explanatory variables.
+    y : the variables to predict.
+
+    Returns
+    -------
+    The denormalized model.
+    """
+    idx = model.index.get_level_values(0).unique()[0]
+
+    return model.apply(
+        lambda x: [
+            denormalize_t0(x.loc[idx, 0], x.loc[idx, 1], X[x.name], y),
+            denormalize_t1(x.loc[idx, 1], X[x.name], y),
+        ],
+        axis=0,
+    )
+
+
+def denormalize_t0(theta0: float, theta1: float, X: pd.Series, y: pd.Series) -> float:
+    """
+    Denormalize the theta 0.
+    Parameters
+    ----------
+    theta0 : First parameter.
+    theta1 : Second parameter.
+    X : The explanatory variables.
+    y : The variables to predict.
+
+    Returns
+    -------
+    The denormalized theta 0.
+    """
+    return y.mean() + y.std() * (theta0 - (theta1 * (X.mean() / X.std())))
+
+
+def denormalize_t1(theta: float, X: pd.Series, y: pd.Series) -> float:
+    """
+    Denormalize the theta 1.
+    Parameters
+    ----------
+    theta : The second theta.
+    X : The explanatory variables.
+    y : The variables to predict.
+
+    Returns
+    -------
+    The denormalized theta 1.
+    """
+    return theta * (y.std() / X.std())

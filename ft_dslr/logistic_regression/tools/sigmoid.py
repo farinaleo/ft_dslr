@@ -1,10 +1,14 @@
 """Sigmoid formula as function."""
 
+import warnings
+
 import numpy as np
 import pandas as pd
 
+warnings.filterwarnings("ignore")
 
-def sigmoid(z: pd.Series) -> pd.Series:
+
+def sigmoid(z: pd.Series | np.ndarray) -> pd.Series | np.ndarray:
     """
     Compute sigmoid function.
     Parameters
@@ -15,9 +19,22 @@ def sigmoid(z: pd.Series) -> pd.Series:
     -------
     A series of results.
     """
+
+    z = np.asarray(z)
+    return 1 / (1 + np.exp(-z))
+
+
+def simple_sigmoid(x: float, a: float, b: float) -> float:
     """
-    Compute the sigmoid function
-    :param z: pd.Series, a series of values
-    :return: pd.Series, the result of the sigmoid function
+    Compute simple sigmoid function.
+    Parameters
+    ----------
+    x : The variable.
+    a : The coefficient.
+    b : The intercept.
+
+    Returns
+    -------
+        The computed value.
     """
-    return z.apply(lambda x: 1 / (1 + np.exp(-x)))
+    return float(1 / (1 + np.exp(-(b + a * x))))

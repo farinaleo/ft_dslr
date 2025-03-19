@@ -101,7 +101,7 @@ def logreg_predict(data_path: str, model_path: str, config_path: str, dest_path:
     -------
     None
     """
-    df_data = format_csv(data_path, config=config_path, norm_data=False)
+    df_data = format_csv(data_path, config=config_path)
     model = load_model(model_path)
     config = load_config(config_path)
 

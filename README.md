@@ -148,49 +148,13 @@ For each iteration of the gradient descent we apply the following formula:
 ```
 where
 ```math
-    {\partial \mathcal{L} \over \partial \beta_0} = {\partial \mathcal{L} \over \partial \sigma}
-     * {\partial \sigma \over \partial \beta_0}
-     = \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)}) * x^{(i)}
+    {\partial \mathcal{L} \over \partial \beta_1} = {\partial \mathcal{L} \over \partial \sigma}
+     * {\partial \sigma \over \partial \beta_1}
+     = 1 / m * \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)}) * x^{(i)}
 ```
 and
 ```math
-    {\partial \mathcal{L} \over \partial \beta_1} = {\partial \mathcal{L} \over \partial \sigma}
-     * {\partial \sigma \over \partial \beta_1}
-     = \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)})
-```
-
-code for the logical regression:
-```python
-import numpy as np
-
-def gradient_descent(X: np.ndarray, y: np.ndarray, epoch:int, learning_rate:float)->dict:
-    thetas = {
-        'theta_0':0,
-        'theta_1':1
-    }
-    
-    for _ in range(epoch):
-        _p0 = partial_derivative_theta_0(X, y)
-        _p1 = partial_derivative_theta_1(X, y)
-        thetas = {
-            'theta_0':thetas['theta_0'] - learning_rate * _p0, 
-            'theta_1':thetas['theta_1'] - learning_rate * _p1
-        }
-    return thetas
-```
-code to learn on multiple variables:
-```python
-import numpy as np
-import pandas as pd
-
-def learn_multiple_y(df:pd.DataFrame, x_col:str, y_col:str, epoch:int, learning_rate:float)->dict:
-    model = {}
-    params = list(df[y_col].unique())
-    
-    for param in params:
-        _df = df.copy(deep=True)
-        _df[y_col] = _df[y_col].replace(params, [1 if e == param else 0 for e in params])
-        model[param] = gradient_descent(_df[x_col], _df[y_col], epoch, learning_rate)
-
-    return model
+    {\partial \mathcal{L} \over \partial \beta_0} = {\partial \mathcal{L} \over \partial \sigma}
+     * {\partial \sigma \over \partial \beta_0}
+     = 1 / m * \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)})
 ```

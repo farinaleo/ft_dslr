@@ -148,13 +148,14 @@ For each iteration of the gradient descent we apply the following formula:
 ```
 where
 ```math
-    {\partial \mathcal{L} \over \partial \beta_1} = {\partial \mathcal{L} \over \partial \sigma}
-     * {\partial \sigma \over \partial \beta_1}
-     = {1 \over{m}} * \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)}) * x^{(i)}
-```
-and
-```math
     {\partial \mathcal{L} \over \partial \beta_0} = {\partial \mathcal{L} \over \partial \sigma}
      * {\partial \sigma \over \partial \beta_0}
      = {1 \over{m}} * \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)})
 ```
+and
+```math
+    {\partial \mathcal{L} \over \partial \beta_1} = {\partial \mathcal{L} \over \partial \sigma}
+     * {\partial \sigma \over \partial \beta_1}
+     = {1 \over{m}} * \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)}) * x^{(i)}
+```
+

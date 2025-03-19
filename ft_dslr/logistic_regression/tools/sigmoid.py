@@ -2,6 +2,9 @@
 
 import numpy as np
 import pandas as pd
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 def sigmoid(z: pd.Series | np.ndarray) -> pd.Series | np.ndarray:

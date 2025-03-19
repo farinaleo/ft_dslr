@@ -158,4 +158,28 @@ and
      * {\partial \sigma \over \partial \beta_1}
      = {1 \over{m}} * \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)}) * x^{(i)}
 ```
+Voici la section ajoutée avec les bonus demandés :
 
+---
+
+## 🎁 Bonus Features
+
+### 📊 Améliorations du Script de Description du Dataset
+
+- **Métriques Supplémentaires**: Ajout des métriques de valeurs manquantes et de plage (range) dans le script `describe.py` pour une analyse plus complète des données _(option `--bonus`)_.
+
+### 📈 Visualisation de la Courbe d'Accuracy
+
+- **Option `--all`**: Visualisation de la courbe d'accuracy tout au long de l'apprentissage avec l'option `--all` pour suivre les performances du modèle.
+
+### 🔄 Sélecteurs de Batch
+
+- **Mini Batch et Stochastic Batch**: Ajout des sélecteurs de batch mini batch et stochastic batch pour diversifier les méthodes d'entraînement et optimiser les performances du modèle _(option `--batch`)_.
+
+### 🏗️ Gestion de Projet avec CI Performante
+
+- **Qualité de Code**: Mise en place d'une CI performante pour assurer la qualité du code, l'entraînement efficace des modèles, et la gestion optimale du projet.
+
+### 📚 Documentation et Intégration Continue
+
+- **Documentation**: Ajout d'une documentation détaillée avec une intégration continue (CI) sur GitHub pour garantir la qualité et la mise à jour continue des informations.

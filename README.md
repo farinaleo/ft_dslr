@@ -158,28 +158,27 @@ and
      * {\partial \sigma \over \partial \beta_1}
      = {1 \over{m}} * \sum^{n - 1}_{i = 0} (\sigma(x^{(i)}) - y^{(i)}) * x^{(i)}
 ```
-Voici la section ajoutée avec les bonus demandés :
 
 ---
 
 ## 🎁 Bonus Features
 
-### 📊 Améliorations du Script de Description du Dataset
+### 📊 Dataset Description Script Enhancements
 
-- **Métriques Supplémentaires**: Ajout des métriques de valeurs manquantes et de plage (range) dans le script `describe.py` pour une analyse plus complète des données _(option `--bonus`)_.
+- **Additional Metrics**: Added missing values and range metrics to the `describe.py` script for a more comprehensive data analysis _(option `--bonus`)_.
 
-### 📈 Visualisation de la Courbe d'Accuracy
+### 📈 Accuracy Curve Visualization
 
-- **Option `--all`**: Visualisation de la courbe d'accuracy tout au long de l'apprentissage avec l'option `--all` pour suivre les performances du modèle.
+- **Option `--all`**: Visualize the accuracy curve throughout the training process with the `--all` option to track model performance.
 
-### 🔄 Sélecteurs de Batch
+### 🔄 Batch Selectors
 
-- **Mini Batch et Stochastic Batch**: Ajout des sélecteurs de batch mini batch et stochastic batch pour diversifier les méthodes d'entraînement et optimiser les performances du modèle _(option `--batch`)_.
+- **Mini Batch and Stochastic Batch**: Added mini batch and stochastic batch selectors to diversify training methods and optimize model performance _(option `--batch`)_.
 
-### 🏗️ Gestion de Projet avec CI Performante
+### 🏗️ Efficient Project Management with CI
 
-- **Qualité de Code**: Mise en place d'une CI performante pour assurer la qualité du code, l'entraînement efficace des modèles, et la gestion optimale du projet.
+- **Code Quality**: Implemented a high-performance CI to ensure code quality, efficient model training, and optimal project management.
 
-### 📚 Documentation et Intégration Continue
+### 📚 Documentation and Continuous Integration
 
-- **Documentation**: Ajout d'une documentation détaillée avec une intégration continue (CI) sur GitHub pour garantir la qualité et la mise à jour continue des informations.
+- **Documentation**: Added detailed documentation with continuous integration (CI) on GitHub to ensure quality and continuous updates of information

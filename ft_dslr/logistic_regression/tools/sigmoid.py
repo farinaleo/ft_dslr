@@ -1,8 +1,9 @@
 """Sigmoid formula as function."""
 
+import warnings
+
 import numpy as np
 import pandas as pd
-import warnings
 
 warnings.filterwarnings("ignore")
 

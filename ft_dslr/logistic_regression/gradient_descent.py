@@ -202,6 +202,18 @@ def get_gradients(
 
 
 def get_accurency(X_test, Y_test, model) -> float:
+    """
+    Compute the accuracy.
+    Parameters
+    ----------
+    X_test :  Test features.
+    Y_test : Test target.
+    model : The model to evaluate>
+
+    Returns
+    -------
+    The accuracy value.
+    """
     y_pred_t = predict(X_test, model)
     y_pred_t = predict_house(y_pred_t)
     acc_test = accuracy_score(Y_test.astype(int).to_list(), y_pred_t) * 100

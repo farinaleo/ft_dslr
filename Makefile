@@ -9,7 +9,7 @@ PYTHON_INTERPRETER = python
 VENV_DIR = .venv
 PYTHON = ${VENV_DIR}/bin/python
 PIP = ${VENV_DIR}/bin/pip
-DATA_URL = https://cdn.intra.42.fr/document/document/29579/datasets.tgz
+DATA_URL = https://cdn.intra.42.fr/document/document/32836/datasets.tgz
 
 #################################################################################
 # COMMANDS                                                                      #

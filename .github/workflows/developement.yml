@@ -12,10 +12,11 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
+        continue-on-error: true
 
       - uses: syphar/restore-pip-download-cache@v1
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
@@ -33,8 +34,8 @@ jobs:
     needs: create-virtualenv
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
 
@@ -47,46 +48,44 @@ jobs:
     needs: school_lint
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
 
       - name: Run make lint
         run: make lint
 
-
   data:
-      runs-on: ubuntu-22.04
-      needs: projet_lint
+    runs-on: ubuntu-22.04
+    needs: projet_lint
 
-      steps:
-        - uses: actions/checkout@v1
-        - uses: actions/setup-python@v2
-        - uses: syphar/restore-virtualenv@v1
-          id: cache-virtualenv
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
 
-        - name: Import_data
-          run: |
-            make data
+      - name: Import_data
+        run: |
+          make data
 
-        - name: Zip_data
-          run: |
-            mkdir -p data_artifact
-            zip -r data_artifact/data.zip data
+      - name: Zip_data
+        run: |
+          mkdir -p data_artifact
+          zip -r data_artifact/data.zip data
 
-        - name: push zip and shasum
-          if: ${{ success() }}
-          run: |
-            shasum data_artifact/data.zip > data_artifact/sha.txt
+      - name: push zip and shasum
+        if: ${{ success() }}
+        run: |
+          shasum data_artifact/data.zip > data_artifact/sha.txt
+        continue-on-error: true
 
-          continue-on-error: true
-
-        - name: Upload data directory
-          uses: actions/upload-artifact@v4
-          with:
-            name: data-artifact
-            path: data_artifact
+      - name: Upload data directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-artifact
+          path: data_artifact
 
   train:
     runs-on: ubuntu-22.04
@@ -94,8 +93,8 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
 
@@ -113,7 +112,7 @@ jobs:
         run: |
           mkdir -p data/model
           pip install -e .
-          python ft_dslr/logistic_regression/logreg_train.py  data/data/external/datasets/dataset_train.csv --config models/logistic.ini --save_dir data
+          python ft_dslr/logistic_regression/logreg_train.py data/data/external/datasets/dataset_train.csv --config models/logistic.ini --save_dir data
 
       - name: Zip_data
         run: |
@@ -132,8 +131,8 @@ jobs:
     if: github.ref == 'refs/heads/dev'
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
 

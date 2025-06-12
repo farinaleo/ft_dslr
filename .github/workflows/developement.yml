@@ -14,20 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
-        continue-on-error: true
-
-      - uses: syphar/restore-pip-download-cache@v1
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
       - run: pip install --upgrade pip
 
       - run: pip install -r requirements.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
       - run: pip install -r requirements-dev.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
   school_lint:
     runs-on: ubuntu-22.04
@@ -36,8 +28,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
 
       - name: Run Flake8
         run: |
@@ -50,8 +40,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
 
       - name: Run make lint
         run: make lint
@@ -63,8 +51,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
 
       - name: Import_data
         run: |
@@ -95,8 +81,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
 
       - name: Download data artifact
         uses: actions/download-artifact@v4
@@ -133,8 +117,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
 
       - name: Build documentation
         id: docs_build

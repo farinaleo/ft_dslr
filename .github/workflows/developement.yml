@@ -126,6 +126,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
 
+      - name: Install pydoctor
+        run: pip install pydoctor
+
       - name: Build documentation
         id: docs_build
         run: |

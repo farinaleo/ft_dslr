@@ -37,7 +37,7 @@ jobs:
           $PYTHON_M flake8 ft_dslr --disable-noqa --config setup.cfg
 
   projet_lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: school_lint
 
     steps:

@@ -159,7 +159,7 @@ def gradient_descent(
             ).values
 
         if X_test is not None or Y_test is not None:
-            acc.append(get_accuracy(X_test, Y_test, thetas))
+            acc.append(get_accurency(X_test, Y_test, thetas))
 
     if X_test is not None or Y_test is not None:
         plt.plot(acc)
@@ -201,19 +201,7 @@ def get_gradients(
     return theta0, theta1
 
 
-def get_accuracy(X_test, Y_test, model) -> float:
-    """
-    Compute the accuracy.
-    Parameters
-    ----------
-    X_test :  Test features.
-    Y_test : Test target.
-    model : The model to evaluate>
-
-    Returns
-    -------
-    The accuracy value.
-    """
+def get_accurency(X_test, Y_test, model) -> float:
     y_pred_t = predict(X_test, model)
     y_pred_t = predict_house(y_pred_t)
     acc_test = accuracy_score(Y_test.astype(int).to_list(), y_pred_t) * 100

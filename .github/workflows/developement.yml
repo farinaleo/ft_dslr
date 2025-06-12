@@ -12,81 +12,74 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
 
-      - uses: syphar/restore-pip-download-cache@v1
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+      - run: pip install --upgrade pip
 
       - run: pip install --upgrade pip
 
       - run: pip install -r requirements.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
       - run: pip install -r requirements-dev.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
   school_lint:
     runs-on: ubuntu-22.04
     needs: create-virtualenv
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+
+      - name: Install Flake8
+        run: pip install flake8
 
       - name: Run Flake8
         run: |
           $PYTHON_M flake8 ft_dslr --disable-noqa --config setup.cfg
 
   projet_lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: school_lint
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+
+      - name: Install Flake8 and isort
+        run: pip install flake8 isort black
 
       - name: Run make lint
         run: make lint
 
-
   data:
-      runs-on: ubuntu-22.04
-      needs: projet_lint
+    runs-on: ubuntu-22.04
+    needs: projet_lint
 
-      steps:
-        - uses: actions/checkout@v1
-        - uses: actions/setup-python@v2
-        - uses: syphar/restore-virtualenv@v1
-          id: cache-virtualenv
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
 
-        - name: Import_data
-          run: |
-            make data
+      - name: Import_data
+        run: |
+          make data
 
-        - name: Zip_data
-          run: |
-            mkdir -p data_artifact
-            zip -r data_artifact/data.zip data
+      - name: Zip_data
+        run: |
+          mkdir -p data_artifact
+          zip -r data_artifact/data.zip data
 
-        - name: push zip and shasum
-          if: ${{ success() }}
-          run: |
-            shasum data_artifact/data.zip > data_artifact/sha.txt
+      - name: push zip and shasum
+        if: ${{ success() }}
+        run: |
+          shasum data_artifact/data.zip > data_artifact/sha.txt
+        continue-on-error: true
 
-          continue-on-error: true
-
-        - name: Upload data directory
-          uses: actions/upload-artifact@v4
-          with:
-            name: data-artifact
-            path: data_artifact
+      - name: Upload data directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-artifact
+          path: data_artifact
 
   train:
     runs-on: ubuntu-22.04
@@ -94,10 +87,8 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
 
       - name: Download data artifact
         uses: actions/download-artifact@v4
@@ -113,7 +104,7 @@ jobs:
         run: |
           mkdir -p data/model
           pip install -e .
-          python ft_dslr/logistic_regression/logreg_train.py  data/data/external/datasets/dataset_train.csv --config models/logistic.ini --save_dir data
+          python ft_dslr/logistic_regression/logreg_train.py data/data/external/datasets/dataset_train.csv --config models/logistic.ini --save_dir data
 
       - name: Zip_data
         run: |
@@ -132,10 +123,8 @@ jobs:
     if: github.ref == 'refs/heads/dev'
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
 
       - name: Build documentation
         id: docs_build

@@ -50,6 +50,11 @@ lint: ## Lint using flake8 and black
 	black --check --config pyproject.toml ${PROJECT_NAME}
 
 
+.PHONY: school_lint
+school_lint: ## lint based on school requirements
+	flake8 ft_dslr
+
+
 .PHONY: format
 format: ## Format source code with black
 	black --config pyproject.toml ${PROJECT_NAME}

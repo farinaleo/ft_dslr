@@ -10,7 +10,11 @@ from sklearn.metrics import accuracy_score
 from tqdm import tqdm
 
 from ft_dslr.logistic_regression.batch_selectors import mandatory_batch
-from ft_dslr.logistic_regression.tools import denormalize_thetas, normalise_df, sigmoid
+from ft_dslr.logistic_regression.tools import (
+    denormalize_thetas,
+    normalise_df,
+    sigmoid,
+)
 
 
 def train(
@@ -20,7 +24,9 @@ def train(
     epoch: int = 1000,
     X_test: pd.DataFrame = None,
     Y_test: pd.DataFrame = None,
-    batch_selector: Callable[[pd.DataFrame, pd.Series], tuple] = mandatory_batch,
+    batch_selector: Callable[
+        [pd.DataFrame, pd.Series], tuple
+    ] = mandatory_batch,
 ) -> pd.DataFrame:
     """
     Train the logistic regression model.
@@ -59,7 +65,9 @@ def train(
     return model
 
 
-def prepare_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFrame, list]:
+def prepare_data(
+    X: pd.DataFrame, y: pd.Series
+) -> tuple[pd.DataFrame, pd.DataFrame, list]:
     """
     Prepare data.
     Parameters
@@ -74,7 +82,9 @@ def prepare_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFr
     data = {}
     y = y.astype(int)
     labels = y.unique().tolist()
-    _X: pd.DataFrame = X.apply(lambda x: normalise_df(x.astype(float)), axis=0).copy(deep=True)
+    _X: pd.DataFrame = X.apply(
+        lambda x: normalise_df(x.astype(float)), axis=0
+    ).copy(deep=True)
 
     _y = pd.DataFrame()
 
@@ -102,7 +112,9 @@ def build_thetas(X: pd.DataFrame, labels: list) -> pd.DataFrame:
     data = {}
 
     for value in labels:
-        temp_df = pd.DataFrame(0, index=[0, 1], columns=X.columns).astype(float)
+        temp_df = pd.DataFrame(0, index=[0, 1], columns=X.columns).astype(
+            float
+        )
         data[value] = temp_df
 
     result = pd.concat(data.values(), keys=data.keys())
@@ -117,7 +129,9 @@ def gradient_descent(
     labels: list,
     learning_rate: float,
     epoch: int,
-    batch_selector: Callable[[pd.DataFrame, pd.Series], tuple] = mandatory_batch,
+    batch_selector: Callable[
+        [pd.DataFrame, pd.Series], tuple
+    ] = mandatory_batch,
     X_test: pd.DataFrame = None,
     Y_test: pd.DataFrame = None,
 ) -> pd.DataFrame:
@@ -169,7 +183,12 @@ def gradient_descent(
 
 
 def get_gradients(
-    X: pd.Series, Y: pd.Series, theta0: float, theta1: float, m: int, learning_rate: float
+    X: pd.Series,
+    Y: pd.Series,
+    theta0: float,
+    theta1: float,
+    m: int,
+    learning_rate: float,
 ) -> tuple[float, float]:
     """
     Compute the new gradient for a specific feature.

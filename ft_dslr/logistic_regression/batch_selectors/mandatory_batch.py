@@ -3,7 +3,9 @@
 import pandas as pd
 
 
-def mandatory_batch(X: pd.DataFrame, Y: pd.DataFrame, **args) -> tuple[pd.DataFrame, pd.DataFrame]:
+def mandatory_batch(
+    X: pd.DataFrame, Y: pd.DataFrame, **args
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Mandatory batch selector. The selector returns the entire dataset.
     Parameters

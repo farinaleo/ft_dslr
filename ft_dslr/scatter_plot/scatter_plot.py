@@ -8,7 +8,9 @@ import pandas as pd
 from ft_dslr.tools import open_csv
 
 
-def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False) -> None:
+def scatter_plot(
+    df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False
+) -> None:
     """
     Create a scatter plot of a dataframe column.
     Parameters
@@ -44,12 +46,16 @@ def scatter_plot(df: pd.DataFrame, x_col: str, y_col: str, verbose: bool = False
     ]
 
     for house in houses:
-        plt.scatter(house[0][x_col], house[0][y_col], s=1, color=house[1], alpha=0.5)
+        plt.scatter(
+            house[0][x_col], house[0][y_col], s=1, color=house[1], alpha=0.5
+        )
 
     plt.title(f"{x_col}, {y_col}")
     plt.xlabel(x_col)
     plt.ylabel(y_col)
-    plt.legend(["G", "R", "S", "H"], loc="center left", bbox_to_anchor=(1, 0.5))
+    plt.legend(
+        ["G", "R", "S", "H"], loc="center left", bbox_to_anchor=(1, 0.5)
+    )
     plt.show()
 
 
@@ -62,8 +68,10 @@ def options_parser():
     """
     parser = argparse.ArgumentParser(
         prog="DSLR Scatter script.",
-        description="this program should be used to plot scatters from the given dataset.",
-        epilog="Please read the subject before proceeding to understand the input file format.",
+        description="this program should be used to plot"
+                    " scatters from the given dataset.",
+        epilog="Please read the subject before proceeding"
+               " to understand the input file format.",
     )
     parser.add_argument("dataset", type=str, nargs=1)
     parser.add_argument(
@@ -86,14 +94,21 @@ if __name__ == "__main__":
         args = options_parser().parse_args()
         df = open_csv(args.dataset[0])
         if not args.all:
-            scatter_plot(df, "Defense Against the Dark Arts", "Astronomy", verbose=args.verbose)
+            scatter_plot(
+                df,
+                "Defense Against the Dark Arts",
+                "Astronomy",
+                verbose=args.verbose,
+            )
         else:
             df_tmp = df.drop(columns="Index", inplace=False)
             cols = df_tmp.select_dtypes(include=["number"]).columns.tolist()
             for x in range(len(cols)):
                 for y in range(len(cols)):
                     if x != y:
-                        scatter_plot(df_tmp, cols[x], cols[y], verbose=args.verbose)
+                        scatter_plot(
+                            df_tmp, cols[x], cols[y], verbose=args.verbose
+                        )
 
     except Exception as e:
         print("[ERROR] Could not open or use the file properly.")

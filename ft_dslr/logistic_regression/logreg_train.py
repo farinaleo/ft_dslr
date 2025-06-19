@@ -14,7 +14,11 @@ from ft_dslr.logistic_regression.batch_selectors import (
 )
 from ft_dslr.logistic_regression.gradient_descent import train
 from ft_dslr.logistic_regression.logreg_predict import predict, predict_house
-from ft_dslr.logistic_regression.tools import format_csv, save_model, split_data
+from ft_dslr.logistic_regression.tools import (
+    format_csv,
+    save_model,
+    split_data,
+)
 
 BATCH_SELECTOR = {
     "mandatory": mandatory_batch,
@@ -32,24 +36,40 @@ def options_parser():
     """
     parser = argparse.ArgumentParser(
         prog="DSLR train model",
-        description="this program should be used to train a model of logistic regression able to predict the "
+        description="this program should be used to train a model of"
+                    " logistic regression able to predict the "
         "hogwarts house of a student.",
-        epilog="Please read the subject before proceeding to understand the input file format.",
+        epilog="Please read the subject before proceeding"
+               "to understand the input file format.",
     )
     parser.add_argument("Train_file", type=str, nargs=1)
     parser.add_argument(
-        "-v", "--verbose", action="store_true", help="show the the results step by step in an GUI"
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="show the the results step by step in an GUI",
     )
     parser.add_argument(
         "-a",
         "--accuracy",
         action="store_true",
-        help="Compute only the accuracy score and not launch the training process.",
+        help="Compute only the accuracy score and"
+             " not launch the training process.",
     )
     parser.add_argument(
-        "-c", "--config", type=str, default="models/logistic.ini", help="The config file."
+        "-c",
+        "--config",
+        type=str,
+        default="models/logistic.ini",
+        help="The config file.",
     )
-    parser.add_argument("-m", "--model", type=str, default="model.csv", help="The model file.")
+    parser.add_argument(
+        "-m",
+        "--model",
+        type=str,
+        default="model.csv",
+        help="The model file."
+    )
     parser.add_argument(
         "-l",
         "--learning_rate",
@@ -104,9 +124,14 @@ if __name__ == "__main__":
         random.seed(args.seed)
 
         df = format_csv(
-            args.Train_file[0], config=args.config, verbose=args.verbose, add_missing=True
+            args.Train_file[0],
+            config=args.config,
+            verbose=args.verbose,
+            add_missing=True,
         )
-        X_train, X_test, y_train, y_test = split_data(df, args.validation_ratio, args.seed)
+        X_train, X_test, y_train, y_test = split_data(
+            df, args.validation_ratio, args.seed
+        )
 
         if args.accuracy:
             model = pd.read_csv(args.model, index_col=[0, 1])
@@ -125,7 +150,9 @@ if __name__ == "__main__":
         y_pred = predict_house(y_pred)
         print(
             " the accuracy score is : ",
-            "{:.2f}".format(accuracy_score(y_test.astype(int).to_list(), y_pred) * 100),
+            "{:.2f}".format(
+                accuracy_score(y_test.astype(int).to_list(), y_pred) * 100
+            ),
             "%",
         )
 

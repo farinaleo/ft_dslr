@@ -23,7 +23,9 @@ def normalise_df(df: pd.Series) -> pd.Series:
     return df_cp
 
 
-def denormalize_thetas(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
+def denormalize_thetas(
+    model: pd.DataFrame, X: pd.DataFrame, y: pd.Series
+) -> pd.DataFrame:
     """
     Denormalize the thetas.
     Parameters
@@ -46,7 +48,9 @@ def denormalize_thetas(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd
     )
 
 
-def _denorm(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
+def _denorm(
+    model: pd.DataFrame, X: pd.DataFrame, y: pd.Series
+) -> pd.DataFrame:
     """
     Denormalize the thetas for a specific level.
     Parameters
@@ -70,7 +74,9 @@ def _denorm(model: pd.DataFrame, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
     )
 
 
-def denormalize_t0(theta0: float, theta1: float, X: pd.Series, y: pd.Series) -> float:
+def denormalize_t0(
+    theta0: float, theta1: float, X: pd.Series, y: pd.Series
+) -> float:
     """
     Denormalize the theta 0.
     Parameters

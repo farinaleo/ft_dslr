@@ -1,4 +1,7 @@
-"""Script used to predict value from a dataframe with a pre-computed logistic regression model."""
+"""
+Script used to predict value from a dataframe with a pre-computed logistic
+regression model.
+"""
 
 import argparse
 import configparser
@@ -35,7 +38,9 @@ def predict(df_data: pd.DataFrame, model: pd.DataFrame) -> list:
             for house in list(model.index.get_level_values(0).unique()):
                 if not pd.isnull(value) and isinstance(value, float):
                     _total[int(house)] += simple_sigmoid(
-                        value, model[col].loc[house, 1], model[col].loc[house, 0]
+                        value,
+                        model[col].loc[house, 1],
+                        model[col].loc[house, 0],
                     )
         predict_list.append((index, _total))
     return predict_list
@@ -87,7 +92,9 @@ def category_to_label(y: list, conf: configparser.ConfigParser):
     return y_labels
 
 
-def logreg_predict(data_path: str, model_path: str, config_path: str, dest_path: str):
+def logreg_predict(
+    data_path: str, model_path: str, config_path: str, dest_path: str
+):
     """
     Predict the house of each student.
     Parameters
@@ -124,13 +131,19 @@ def options_parser():
     """
     parser = argparse.ArgumentParser(
         prog="DSLR predict model",
-        description="this program should be used to predict with a model of logistic regression",
-        epilog="Please read the subject before proceeding to understand the input file format.",
+        description="this program should be used to predict with"
+                    " a model of logistic regression",
+        epilog="Please read the subject before proceeding to"
+               " understand the input file format.",
     )
     parser.add_argument("Dataset_file", type=str, nargs=1)
     parser.add_argument("Weights_file", type=str, nargs=1)
     parser.add_argument(
-        "-c", "--config", type=str, default="models/logistic.ini", help="The config file."
+        "-c",
+        "--config",
+        type=str,
+        default="models/logistic.ini",
+        help="The config file.",
     )
     parser.add_argument(
         "-d",
@@ -145,7 +158,9 @@ def options_parser():
 if __name__ == "__main__":
     try:
         args = options_parser().parse_args()
-        logreg_predict(args.Dataset_file[0], args.Weights_file[0], args.config, args.dest)
+        logreg_predict(
+            args.Dataset_file[0], args.Weights_file[0], args.config, args.dest
+        )
     except Exception as e:
         print("[ERROR] The predict process failed")
         print(e)

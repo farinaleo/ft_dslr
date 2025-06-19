@@ -7,7 +7,10 @@ import pandas as pd
 
 
 def format_csv(
-    path: str, config: str = None, add_missing: bool = False, verbose: bool = False
+    path: str,
+    config: str = None,
+    add_missing: bool = False,
+    verbose: bool = False,
 ) -> pd.DataFrame:
     """
     Format and apply configurations on csv files.
@@ -31,10 +34,14 @@ def format_csv(
         return df
 
     except Exception as e:
-        raise ValueError(f"[ERROR] Some thing went wrong with csv and/or config file.\n{e}")
+        raise ValueError(
+            f"[ERROR] Some thing went wrong with csv and/or config file.\n{e}"
+        )
 
 
-def apply_config(config: str, df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
+def apply_config(
+    config: str, df: pd.DataFrame, verbose: bool = False
+) -> pd.DataFrame:
     """
     Apply configurations to dataframe.
     Parameters
@@ -99,8 +106,13 @@ def config_replace_values(
             if sub_section in df.columns:
                 for var in config[section]:
                     if verbose:
-                        print(f"[INFO] replace {var} by {config[section][var]} in {sub_section}")
-                    df[sub_section] = df[sub_section].replace(var, config[section][var])
+                        print(
+                            f"[INFO] replace {var} by ",
+                            f"{config[section][var]} in {sub_section}"
+                        )
+                    df[sub_section] = df[sub_section].replace(
+                        var, config[section][var]
+                    )
     return df
 
 

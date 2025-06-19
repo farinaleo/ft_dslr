@@ -35,14 +35,21 @@ def pair_plot(df: pd.DataFrame, verbose: bool = False) -> None:
 
     x_size, y_size = len(x_col), len(y_col)
     fig, axes = plt.subplots(
-        nrows=y_size, ncols=x_size, squeeze=False, sharex=False, sharey=False, figsize=(20, 20)
+        nrows=y_size,
+        ncols=x_size,
+        squeeze=False,
+        sharex=False,
+        sharey=False,
+        figsize=(20, 20),
     )
 
     for x in range(x_size):
         for y in range(y_size):
             plot_single_graph(df_tmp, x_col, y_col, axes[y, x], x, y)
 
-    plt.legend(["G", "R", "S", "H"], loc="center left", bbox_to_anchor=(1, 0.5))
+    plt.legend(
+        ["G", "R", "S", "H"], loc="center left", bbox_to_anchor=(1, 0.5)
+    )
     plt.show()
 
 
@@ -78,7 +85,13 @@ def plot_single_graph(
 
     for house in houses:
         if x != y:
-            fig.scatter(house[0][x_cols[x]], house[0][y_cols[y]], s=1, color=house[1], alpha=0.5)
+            fig.scatter(
+                house[0][x_cols[x]],
+                house[0][y_cols[y]],
+                s=1,
+                color=house[1],
+                alpha=0.5,
+            )
         else:
             fig.hist(house[0][x_cols[x]], color=house[1], alpha=0.5)
 
@@ -99,8 +112,10 @@ def options_parser():
     """
     parser = argparse.ArgumentParser(
         prog="DSLR Pair plot script",
-        description="this program should be used to produce pair plot of a dataset.",
-        epilog="Please read the subject before proceeding to understand the input file format.",
+        description="this program should be used to produce"
+                    " pair plot of a dataset.",
+        epilog="Please read the subject before proceeding to"
+               " understand the input file format.",
     )
     parser.add_argument("dataset", type=str, nargs=1)
     parser.add_argument(

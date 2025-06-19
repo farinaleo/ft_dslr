@@ -9,7 +9,10 @@ from ft_dslr.tools import open_csv
 
 
 def describe(
-    df: pd.DataFrame, drop: bool = False, bonus: bool = False, verbose: bool = False
+    df: pd.DataFrame,
+    drop: bool = False,
+    bonus: bool = False,
+    verbose: bool = False,
 ) -> pd.DataFrame:
     """
     Describe the given dataframe.
@@ -35,7 +38,16 @@ def describe(
     df_tmp = df_tmp.astype(float)
 
     if not bonus:
-        description["Info"] = ["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]
+        description["Info"] = [
+            "Count",
+            "Mean",
+            "Std",
+            "Min",
+            "25%",
+            "50%",
+            "75%",
+            "Max",
+        ]
     else:
         description["Info"] = [
             "Count",
@@ -58,7 +70,9 @@ def describe(
     return description
 
 
-def describe_column(df: pd.DataFrame, column: str, bonus: bool = False) -> list:
+def describe_column(
+    df: pd.DataFrame, column: str, bonus: bool = False
+) -> list:
     """
     Describe a specific column from the dataframe.
     Parameters
@@ -212,10 +226,14 @@ def options_parser():
     parser = argparse.ArgumentParser(
         prog="DSLR describe dataset",
         description="this program should be used to describe a dataset.",
-        epilog="Please read the subject before proceeding to understand the input file format.",
+        epilog="Please read the subject before proceeding"
+               " to understand the input file format.",
     )
     parser.add_argument("dataset", type=str, nargs=1)
-    parser.add_argument("-d", "--drop", action="store_true", help="Drop empty columns.")
+    parser.add_argument(
+        "-d", "--drop", action="store_true", help="Drop"
+                                                  " empty columns."
+    )
     parser.add_argument(
         "-v",
         "--verbose",
@@ -238,9 +256,13 @@ if __name__ == "__main__":
         df = open_csv(
             args.dataset[0],
         )
-        description = describe(df, drop=args.drop, bonus=args.bonus, verbose=args.verbose)
+        description = describe(
+            df, drop=args.drop, bonus=args.bonus, verbose=args.verbose
+        )
         print(description)
-        print("\n[INFO] To see the entire description, use the jupyter notebook.")
+        print(
+            "\n[INFO] To see the entire description, use the jupyter notebook."
+        )
     except Exception as e:
         print("[ERROR] Could not open the file properly.")
         print(f"[ERROR] Error: {e}")
